@@ -42,6 +42,51 @@ const earlyMessage = document.getElementById('early-message');
 const confettiContainer = document.getElementById('confetti-container');
 
 // ============================================
+// 3D MOUSE TRACKING
+// ============================================
+
+/**
+ * Track mouse movement and apply 3D rotation to envelope
+ */
+function setup3DMouseTracking() {
+    const envelopeContainer = document.querySelector('.envelope-container');
+    
+    if (!envelopeContainer || !envelope) return;
+    
+    envelopeContainer.addEventListener('mousemove', (e) => {
+        // Don't apply 3D rotation if envelope is opening or shaking
+        if (envelope.classList.contains('opening') || envelope.classList.contains('shaking')) {
+            return;
+        }
+        
+        const rect = envelopeContainer.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        
+        // Calculate mouse position relative to center
+        const mouseX = e.clientX - centerX;
+        const mouseY = e.clientY - centerY;
+        
+        // Calculate rotation angles (max 15 degrees for subtle effect)
+        const rotateY = (mouseX / rect.width) * 15;
+        const rotateX = -(mouseY / rect.height) * 15;
+        
+        // Apply 3D transform
+        envelope.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+    
+    // Reset rotation when mouse leaves
+    envelopeContainer.addEventListener('mouseleave', () => {
+        if (!envelope.classList.contains('opening') && !envelope.classList.contains('shaking')) {
+            envelope.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+        }
+    });
+}
+
+// Initialize 3D mouse tracking
+setup3DMouseTracking();
+
+// ============================================
 // ENVELOPE INTERACTIONS
 // ============================================
 
@@ -100,6 +145,8 @@ function handleEnvelopeClick() {
     }
     
     // Envelope is unlocked - proceed with opening animation
+    // Temporarily disable 3D mouse tracking during opening
+    envelope.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
     envelope.classList.add('opening');
     
     // Create confetti after a short delay
