@@ -46,40 +46,58 @@ const confettiContainer = document.getElementById('confetti-container');
 // ============================================
 
 /**
- * Track mouse movement and apply 3D rotation to envelope
+ * Track mouse movement anywhere on page and apply 3D rotation to envelope
  */
 function setup3DMouseTracking() {
-    const envelopeContainer = document.querySelector('.envelope-container');
+    if (!envelope) return;
     
-    if (!envelopeContainer || !envelope) return;
+    // Track mouse position relative to viewport center
+    let targetRotateY = 0;
+    let targetRotateX = 0;
+    let currentRotateY = 0;
+    let currentRotateX = 0;
     
-    envelopeContainer.addEventListener('mousemove', (e) => {
+    document.addEventListener('mousemove', (e) => {
         // Don't apply 3D rotation if envelope is opening or shaking
         if (envelope.classList.contains('opening') || envelope.classList.contains('shaking')) {
             return;
         }
         
-        const rect = envelopeContainer.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+        // Calculate mouse position relative to viewport center
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
         
-        // Calculate mouse position relative to center
         const mouseX = e.clientX - centerX;
         const mouseY = e.clientY - centerY;
         
-        // Calculate rotation angles (max 15 degrees for subtle effect)
-        const rotateY = (mouseX / rect.width) * 15;
-        const rotateX = -(mouseY / rect.height) * 15;
-        
-        // Apply 3D transform
-        envelope.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        // Calculate target rotation angles (max 25 degrees for more noticeable effect)
+        // Normalize based on viewport size
+        targetRotateY = (mouseX / window.innerWidth) * 25;
+        targetRotateX = -(mouseY / window.innerHeight) * 25;
     });
     
-    // Reset rotation when mouse leaves
-    envelopeContainer.addEventListener('mouseleave', () => {
+    // Smooth animation loop for gradual rotation
+    function animateRotation() {
+        // Smooth interpolation for gradual movement
+        const smoothing = 0.1;
+        currentRotateY += (targetRotateY - currentRotateY) * smoothing;
+        currentRotateX += (targetRotateX - currentRotateX) * smoothing;
+        
+        // Apply 3D transform
         if (!envelope.classList.contains('opening') && !envelope.classList.contains('shaking')) {
-            envelope.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+            envelope.style.transform = `perspective(1000px) rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
         }
+        
+        requestAnimationFrame(animateRotation);
+    }
+    
+    // Start animation loop
+    animateRotation();
+    
+    // Reset rotation when mouse leaves the page
+    document.addEventListener('mouseleave', () => {
+        targetRotateY = 0;
+        targetRotateX = 0;
     });
 }
 
