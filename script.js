@@ -23,10 +23,11 @@ function getCurrentTimeEST() {
 /**
  * Check if the unlock time has been reached
  * Compares current UTC time with unlock UTC time
+ * TEMPORARILY DISABLED FOR TESTING
  */
 function isUnlocked() {
-    const now = new Date();
-    return now >= UNLOCK_DATE_UTC;
+    // return now >= UNLOCK_DATE_UTC;
+    return true; // Always unlocked for testing
 }
 
 // ============================================
@@ -72,10 +73,10 @@ function setup3DMouseTracking() {
         const mouseX = e.clientX - centerX;
         const mouseY = e.clientY - centerY;
         
-        // Calculate target rotation angles (max 25 degrees for more noticeable effect)
+        // Calculate target rotation angles (max 180 degrees to see the back)
         // Normalize based on viewport size
-        targetRotateY = (mouseX / window.innerWidth) * 25;
-        targetRotateX = -(mouseY / window.innerHeight) * 25;
+        targetRotateY = (mouseX / window.innerWidth) * 180;
+        targetRotateX = -(mouseY / window.innerHeight) * 30;
     });
     
     // Combined animation loop for rotation and floating
