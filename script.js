@@ -38,7 +38,6 @@ const landingScreen = document.getElementById('landing-screen');
 const textScreen = document.getElementById('text-screen');
 const mapScreen = document.getElementById('map-screen');
 const unlockMessage = document.getElementById('unlock-message');
-const earlyMessage = document.getElementById('early-message');
 const confettiContainer = document.getElementById('confetti-container');
 
 // ============================================
@@ -109,19 +108,13 @@ setup3DMouseTracking();
 // ============================================
 
 /**
- * Show shake animation and early message
+ * Show shake animation for early clicks
  */
 function showEarlyClickAnimation() {
     envelope.classList.add('shaking');
-    earlyMessage.classList.remove('hidden');
-    earlyMessage.classList.add('show');
     
     setTimeout(() => {
         envelope.classList.remove('shaking');
-        earlyMessage.classList.remove('show');
-        setTimeout(() => {
-            earlyMessage.classList.add('hidden');
-        }, 2000);
     }, 500);
 }
 
