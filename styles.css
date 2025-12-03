@@ -367,10 +367,20 @@ body {
 }
 
 /* City dots */
+.city-dot-group {
+    cursor: pointer;
+}
+
+.city-dot-hover {
+    cursor: pointer;
+}
+
 .city-dot {
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: filter 0.3s ease;
     filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
+    transform-origin: center center;
+    pointer-events: none;
 }
 
 .city-dot.visible {
@@ -381,15 +391,13 @@ body {
 @keyframes dotGlow {
     0%, 100% {
         filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
-        transform: scale(1);
     }
     50% {
         filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.9));
-        transform: scale(1.2);
     }
 }
 
-.city-dot:hover {
+.city-dot-group:hover .city-dot {
     filter: drop-shadow(0 0 20px rgba(255, 105, 180, 1));
     transform: scale(1.3);
 }

@@ -300,10 +300,14 @@ function startMapAnimation() {
             dot.classList.add('visible');
             dot.setAttribute('data-city-name', city.name);
             
-            // Add click and hover listeners
-            dot.addEventListener('click', () => handleCityClick(city.name, dot));
-            dot.addEventListener('mouseenter', (e) => showCityTooltip(city.name, e));
-            dot.addEventListener('mouseleave', hideCityTooltip);
+            // Find the parent group for hover detection
+            const group = dot.parentElement;
+            if (group && group.classList.contains('city-dot-group')) {
+                // Add click and hover listeners to the group (which has the invisible hover area)
+                group.addEventListener('click', () => handleCityClick(city.name, dot));
+                group.addEventListener('mouseenter', (e) => showCityTooltip(city.name, dot));
+                group.addEventListener('mouseleave', hideCityTooltip);
+            }
         }, index * 1000);
     });
 }
@@ -321,9 +325,8 @@ function handleCityClick(cityName, dotElement) {
 /**
  * Show tooltip on hover (desktop)
  */
-function showCityTooltip(cityName, event) {
-    const dot = event.target;
-    const bbox = dot.getBBox();
+function showCityTooltip(cityName, dotElement) {
+    const bbox = dotElement.getBBox();
     cityTooltip.textContent = cityName;
     cityTooltip.setAttribute('x', bbox.x + bbox.width / 2);
     cityTooltip.setAttribute('y', bbox.y - 15);
