@@ -267,14 +267,12 @@ body {
 }
 
 .confetti {
-    position: absolute;
+    position: fixed;
     width: 10px;
     height: 10px;
     background: #ff69b4;
-    top: 50%;
-    left: 50%;
-    opacity: 0;
-    transform: translate(-50%, -50%);
+    opacity: 1;
+    transform-origin: center center;
 }
 
 .confetti:nth-child(1) { background: #ff69b4; }
@@ -288,14 +286,24 @@ body {
 .confetti:nth-child(9) { background: #ffb3d9; }
 .confetti:nth-child(10) { background: #ff80b3; }
 
-@keyframes confettiFall {
+@keyframes confettiShootAndFall {
     0% {
         opacity: 1;
-        transform: translate(-50%, -50%) translateY(0) translateX(0) rotate(0deg);
+        left: var(--start-x, 50%);
+        top: var(--start-y, 50%);
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    25% {
+        opacity: 1;
+        left: var(--shoot-x, 50%);
+        top: var(--shoot-y, 50%);
+        transform: translate(-50%, -50%) rotate(calc(var(--rotation, 0deg) * 0.3));
     }
     100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) translateY(100vh) translateX(calc(var(--random-x) * 100px)) rotate(720deg);
+        opacity: 0.7;
+        left: var(--final-x, 50%);
+        top: var(--final-y, 100vh);
+        transform: translate(-50%, -50%) rotate(var(--rotation, 720deg));
     }
 }
 

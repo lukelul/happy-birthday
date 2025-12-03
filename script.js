@@ -134,31 +134,58 @@ function showEarlyClickAnimation() {
 }
 
 /**
- * Create confetti explosion
+ * Create confetti explosion - shoots up then rains down like snow
  */
 function createConfetti() {
-    const confettiCount = 50;
+    const confettiCount = 100;
     const colors = ['#ff69b4', '#ff99cc', '#ffb3d9', '#ff80b3', '#ff66b3', '#ff1493'];
+    
+    // Get envelope position for starting point
+    const envelopeRect = envelope.getBoundingClientRect();
+    const startX = envelopeRect.left + envelopeRect.width / 2;
+    const startY = envelopeRect.top + envelopeRect.height / 2;
     
     for (let i = 0; i < confettiCount; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
-        const randomX = (Math.random() - 0.5) * 2; // -1 to 1
-        confetti.style.setProperty('--random-x', randomX);
-        confetti.style.left = '50%';
+        
+        // Random horizontal spread across the page
+        const randomX = (Math.random() - 0.5) * window.innerWidth * 1.5;
+        const randomY = Math.random() * window.innerHeight;
+        const randomRotation = Math.random() * 720; // 0-720 degrees
+        const randomSize = Math.random() * 8 + 4; // 4-12px
+        const fallDuration = Math.random() * 3 + 3; // 3-6 seconds
+        const shootUpHeight = Math.random() * 100 + 50; // 50-150px up
+        
+        confetti.style.left = startX + 'px';
+        confetti.style.top = startY + 'px';
         confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.width = (Math.random() * 10 + 5) + 'px';
-        confetti.style.height = (Math.random() * 10 + 5) + 'px';
+        confetti.style.width = randomSize + 'px';
+        confetti.style.height = randomSize + 'px';
         confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
-        confetti.style.animationDelay = Math.random() * 0.3 + 's';
-        confetti.style.animation = `confettiFall ${Math.random() * 2 + 2}s ease-out forwards`;
+        confetti.style.animationDelay = Math.random() * 0.2 + 's';
+        
+        // Calculate final positions
+        const finalX = startX + randomX;
+        const finalY = startY + randomY + window.innerHeight;
+        const shootUpY = startY - shootUpHeight;
+        
+        confetti.style.setProperty('--start-x', startX + 'px');
+        confetti.style.setProperty('--start-y', startY + 'px');
+        confetti.style.setProperty('--shoot-x', (startX + randomX * 0.3) + 'px');
+        confetti.style.setProperty('--shoot-y', shootUpY + 'px');
+        confetti.style.setProperty('--final-x', finalX + 'px');
+        confetti.style.setProperty('--final-y', finalY + 'px');
+        confetti.style.setProperty('--rotation', randomRotation + 'deg');
+        confetti.style.animation = `confettiShootAndFall ${fallDuration}s ease-in-out forwards`;
+        
         confettiContainer.appendChild(confetti);
     }
     
     // Clean up confetti after animation
     setTimeout(() => {
         confettiContainer.innerHTML = '';
-    }, 5000);
+    }, 10000);
 }
 
 /**
