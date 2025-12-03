@@ -55,6 +55,9 @@ function setup3DMouseTracking() {
     let targetRotateX = 0;
     let currentRotateY = 0;
     let currentRotateX = 0;
+    let floatOffset = 0;
+    let floatDirection = 1;
+    let lastTime = performance.now();
     
     document.addEventListener('mousemove', (e) => {
         // Don't apply 3D rotation if envelope is opening or shaking
@@ -75,16 +78,25 @@ function setup3DMouseTracking() {
         targetRotateX = -(mouseY / window.innerHeight) * 25;
     });
     
-    // Smooth animation loop for gradual rotation
+    // Combined animation loop for rotation and floating
     function animateRotation() {
-        // Smooth interpolation for gradual movement
+        const now = performance.now();
+        const deltaTime = (now - lastTime) / 1000; // Convert to seconds
+        lastTime = now;
+        
+        // Update float animation (sine wave for smooth up/down)
+        const floatSpeed = 1; // cycles per second
+        floatOffset = Math.sin(now * 0.001 * floatSpeed * Math.PI * 2) * 10; // -10 to 10px
+        
+        // Smooth interpolation for gradual rotation
         const smoothing = 0.1;
         currentRotateY += (targetRotateY - currentRotateY) * smoothing;
         currentRotateX += (targetRotateX - currentRotateX) * smoothing;
         
-        // Apply 3D transform
+        // Apply 3D transform with combined rotation and float
         if (!envelope.classList.contains('opening') && !envelope.classList.contains('shaking')) {
-            envelope.style.transform = `perspective(1000px) rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg)`;
+            envelope.style.transform = `perspective(1000px) rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg) translateY(${floatOffset}px)`;
+            envelope.style.animation = 'none'; // Disable CSS animation since we're handling it in JS
         }
         
         requestAnimationFrame(animateRotation);
@@ -115,6 +127,8 @@ function showEarlyClickAnimation() {
     
     setTimeout(() => {
         envelope.classList.remove('shaking');
+        // Re-enable animation after shaking stops
+        envelope.style.animation = '';
     }, 500);
 }
 
