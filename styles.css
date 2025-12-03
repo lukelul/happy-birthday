@@ -69,15 +69,15 @@ body {
     width: 200px;
     height: 150px;
     transform-style: preserve-3d;
-    backface-visibility: hidden;
+    backface-visibility: visible;
 }
 
 .envelope-front {
-    transform: rotateY(0deg);
+    transform: rotateY(0deg) translateZ(0);
 }
 
 .envelope-back {
-    transform: rotateY(180deg);
+    transform: rotateY(180deg) translateZ(0);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -129,6 +129,14 @@ body {
     font-weight: 500;
     line-height: 1.6;
     padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
 }
 
 .back-line-1 {

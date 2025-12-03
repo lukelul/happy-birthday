@@ -73,10 +73,10 @@ function setup3DMouseTracking() {
         const mouseX = e.clientX - centerX;
         const mouseY = e.clientY - centerY;
         
-        // Calculate target rotation angles (max 180 degrees to see the back)
+        // Calculate target rotation angles (max 270 degrees for full rotation)
         // Normalize based on viewport size
-        targetRotateY = (mouseX / window.innerWidth) * 180;
-        targetRotateX = -(mouseY / window.innerHeight) * 30;
+        targetRotateY = (mouseX / window.innerWidth) * 270;
+        targetRotateX = -(mouseY / window.innerHeight) * 270;
     });
     
     // Combined animation loop for rotation and floating
@@ -164,7 +164,10 @@ function createConfetti() {
 /**
  * Handle envelope click
  */
-function handleEnvelopeClick() {
+function handleEnvelopeClick(e) {
+    e.stopPropagation();
+    console.log('Envelope clicked, isUnlocked:', isUnlocked());
+    
     if (!isUnlocked()) {
         showEarlyClickAnimation();
         return;
