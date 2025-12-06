@@ -73,10 +73,10 @@ function setup3DMouseTracking() {
         const mouseX = e.clientX - centerX;
         const mouseY = e.clientY - centerY;
         
-        // Calculate target rotation angles (max 360 degrees for full spin)
+        // Calculate target rotation angles (max 480 degrees for full spin)
         // Normalize based on viewport size
-        targetRotateY = (mouseX / window.innerWidth) * 360;
-        targetRotateX = -(mouseY / window.innerHeight) * 360;
+        targetRotateY = (mouseX / window.innerWidth) * 480;
+        targetRotateX = -(mouseY / window.innerHeight) * 480;
     });
     
     // Combined animation loop for rotation and floating
