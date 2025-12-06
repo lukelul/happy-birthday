@@ -1,385 +1,303 @@
 // ============================================
-// TIME LOCK & EST CONVERSION
+// MEMORY DATA STRUCTURE
 // ============================================
+// Easy to edit: Add new memories here!
+// Each memory needs: id, color, photo (URL or path), and text
 
-// Unlock date: December 13, 2025 at 12:00 AM EST
-// EST is UTC-5, so Dec 13, 2025 00:00 EST = Dec 13, 2025 05:00 UTC
-const UNLOCK_DATE_UTC = new Date('2025-12-13T05:00:00Z'); // 12:00 AM EST in UTC
-
-/**
- * Get current time in EST
- * EST is UTC-5 (Eastern Standard Time, not EDT)
- * In December, there's no daylight saving, so it's always UTC-5
- */
-function getCurrentTimeEST() {
-    const now = new Date();
-    // Convert to UTC milliseconds
-    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60000);
-    // EST is UTC-5, so subtract 5 hours (5 * 60 * 60 * 1000 ms)
-    const estTime = new Date(utcTime - (5 * 60 * 60 * 1000));
-    return estTime;
-}
-
-/**
- * Check if the unlock time has been reached
- * Compares current UTC time with unlock UTC time
- */
-function isUnlocked() {
-    const now = new Date();
-    return now >= UNLOCK_DATE_UTC;
-}
+const memories = [
+    {
+        id: 1,
+        color: "#F9A8D4", // Soft pink
+        photo: "images/memory1.jpg", // Replace with your photo URL or path
+        text: "Our first date at the coffee shop… The way you smiled when you saw me made my heart skip a beat. I knew right then that this was something special."
+    },
+    {
+        id: 2,
+        color: "#A5F3FC", // Soft blue
+        photo: "images/memory2.jpg", // Replace with your photo URL or path
+        text: "The time we explored downtown together… Walking hand in hand, discovering new places, and creating our own little adventures. Every moment felt like magic."
+    },
+    {
+        id: 3,
+        color: "#C4B5FD", // Soft purple
+        photo: "images/memory3.jpg", // Replace with your photo URL or path
+        text: "That rainy day we spent indoors, watching movies and talking for hours… Time seemed to stand still when I was with you."
+    },
+    {
+        id: 4,
+        color: "#FCD34D", // Soft yellow
+        photo: "images/memory4.jpg", // Replace with your photo URL or path
+        text: "The sunset we watched together… The sky painted in hues of pink and orange, but nothing was more beautiful than seeing it reflected in your eyes."
+    },
+    {
+        id: 5,
+        color: "#FCA5A5", // Soft coral
+        photo: "images/memory5.jpg", // Replace with your photo URL or path
+        text: "Our first laugh together… That moment when we both couldn't stop giggling, and I realized how much joy you bring into my life."
+    },
+    {
+        id: 6,
+        color: "#93C5FD", // Soft sky blue
+        photo: "images/memory6.jpg", // Replace with your photo URL or path
+        text: "The surprise you planned for me… Your thoughtfulness and the way you care about making me happy means everything to me."
+    }
+];
 
 // ============================================
 // DOM ELEMENTS
 // ============================================
 
-const envelope = document.getElementById('envelope');
-const landingScreen = document.getElementById('landing-screen');
-const textScreen = document.getElementById('text-screen');
-const mapScreen = document.getElementById('map-screen');
-const unlockMessage = document.getElementById('unlock-message');
-const earlyMessage = document.getElementById('early-message');
-const confettiContainer = document.getElementById('confetti-container');
+const jarScene = document.getElementById('jar-scene');
+const memoryScene = document.getElementById('memory-scene');
+const jar = document.getElementById('jar');
+const marblesContainer = document.getElementById('marbles-container');
+const insertCoinBtn = document.getElementById('insert-coin-btn');
+const coinAnimation = document.getElementById('coin-animation');
+const revealedMarble = document.getElementById('revealed-marble');
+const memoryContent = document.getElementById('memory-content');
+const memoryPhoto = document.getElementById('memory-photo');
+const memoryText = document.getElementById('memory-text');
+const backBtn = document.getElementById('back-btn');
 
 // ============================================
-<<<<<<< HEAD
-// 3D MOUSE TRACKING
+// INITIALIZE MARBLES IN JAR
 // ============================================
 
 /**
- * Track mouse movement anywhere on page and apply 3D rotation to envelope
+ * Create and position marbles inside the jar
+ * Each marble represents a memory
  */
-function setup3DMouseTracking() {
-    if (!envelope) return;
+function initializeMarbles() {
+    marblesContainer.innerHTML = ''; // Clear existing marbles
     
-    // Track mouse position relative to viewport center
-    let targetRotateY = 0;
-    let targetRotateX = 0;
-    let currentRotateY = 0;
-    let currentRotateX = 0;
-    let floatOffset = 0;
-    let floatDirection = 1;
-    let lastTime = performance.now();
-    
-    document.addEventListener('mousemove', (e) => {
-        // Don't apply 3D rotation if envelope is opening or shaking
-        if (envelope.classList.contains('opening') || envelope.classList.contains('shaking')) {
-            return;
-        }
+    memories.forEach((memory, index) => {
+        const marble = document.createElement('div');
+        marble.className = 'marble';
+        marble.style.backgroundColor = memory.color;
+        marble.style.color = memory.color;
         
-        // Calculate mouse position relative to viewport center
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
+        // Random position inside jar (avoid edges)
+        const x = Math.random() * 180 + 30; // 30 to 210px
+        const y = Math.random() * 250 + 30; // 30 to 280px
         
-        const mouseX = e.clientX - centerX;
-        const mouseY = e.clientY - centerY;
+        marble.style.left = x + 'px';
+        marble.style.bottom = y + 'px';
+        marble.setAttribute('data-memory-id', memory.id);
         
-        // Calculate target rotation angles (max 480 degrees for full spin)
-        // Normalize based on viewport size
-        targetRotateY = (mouseX / window.innerWidth) * 480;
-        targetRotateX = -(mouseY / window.innerHeight) * 480;
-    });
-    
-    // Combined animation loop for rotation and floating
-    function animateRotation() {
-        const now = performance.now();
-        const deltaTime = (now - lastTime) / 1000; // Convert to seconds
-        lastTime = now;
-        
-        // Update float animation (sine wave for smooth up/down)
-        const floatSpeed = 1; // cycles per second
-        floatOffset = Math.sin(now * 0.001 * floatSpeed * Math.PI * 2) * 10; // -10 to 10px
-        
-        // Smooth interpolation for gradual rotation
-        const smoothing = 0.1;
-        currentRotateY += (targetRotateY - currentRotateY) * smoothing;
-        currentRotateX += (targetRotateX - currentRotateX) * smoothing;
-        
-        // Apply 3D transform with combined rotation and float
-        if (!envelope.classList.contains('opening') && !envelope.classList.contains('shaking')) {
-            envelope.style.transform = `perspective(1000px) rotateX(${currentRotateX}deg) rotateY(${currentRotateY}deg) translateY(${floatOffset}px)`;
-            envelope.style.animation = 'none'; // Disable CSS animation since we're handling it in JS
-        }
-        
-        requestAnimationFrame(animateRotation);
-    }
-    
-    // Start animation loop
-    animateRotation();
-    
-    // Reset rotation when mouse leaves the page
-    document.addEventListener('mouseleave', () => {
-        targetRotateY = 0;
-        targetRotateX = 0;
+        marblesContainer.appendChild(marble);
     });
 }
 
-// Initialize 3D mouse tracking
-setup3DMouseTracking();
+// Initialize marbles on page load
+initializeMarbles();
 
 // ============================================
-=======
->>>>>>> 474e1df233f80ea416979649e4d454d8c7299e2f
-// ENVELOPE INTERACTIONS
+// COIN INSERTION & JAR SHAKE
 // ============================================
+
+let isAnimating = false;
 
 /**
- * Show shake animation and early message
+ * Handle coin insertion button click
  */
-function showEarlyClickAnimation() {
-    envelope.classList.add('shaking');
-    earlyMessage.classList.remove('hidden');
-    earlyMessage.classList.add('show');
+insertCoinBtn.addEventListener('click', () => {
+    if (isAnimating) return; // Prevent multiple clicks during animation
     
+    isAnimating = true;
+    insertCoinBtn.disabled = true;
+    
+    // Step 1: Coin drop animation
+    playCoinDropAnimation();
+    
+    // Step 2: After coin drops, start jar shake and marble swirl
     setTimeout(() => {
-        envelope.classList.remove('shaking');
-        earlyMessage.classList.remove('show');
-        setTimeout(() => {
-            earlyMessage.classList.add('hidden');
-        }, 2000);
-    }, 500);
+        startJarShake();
+    }, 800);
+    
+    // Step 3: After shaking, pop out a marble
+    setTimeout(() => {
+        popMarble();
+    }, 2800);
+});
+
+/**
+ * Play coin drop animation
+ */
+function playCoinDropAnimation() {
+    coinAnimation.classList.remove('hidden');
+    coinAnimation.classList.add('dropping');
+    
+    // Reset animation after it completes
+    setTimeout(() => {
+        coinAnimation.classList.remove('dropping');
+        coinAnimation.classList.add('hidden');
+    }, 800);
 }
 
 /**
- * Create confetti explosion from top of envelope
+ * Start jar shake animation and swirl marbles
  */
-function createConfetti() {
-    const confettiCount = 50;
-    const colors = ['#ff69b4', '#ff99cc', '#ffb3d9', '#ff80b3', '#ff66b3', '#ff1493'];
+function startJarShake() {
+    jar.classList.add('shaking');
     
-    // Get envelope position to calculate top center
-    const envelopeRect = envelope.getBoundingClientRect();
-    const startX = envelopeRect.left + envelopeRect.width / 2; // Top center X
-    const startY = envelopeRect.top; // Top center Y
-    
-    for (let i = 0; i < confettiCount; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        
-        // Random spread angles and distances
-        const angle = (Math.random() - 0.5) * Math.PI * 1.5; // Spread mostly upward and outward
-        const distance = Math.random() * 300 + 100; // How far to travel
-        const randomX = Math.cos(angle) * distance;
-        const randomY = Math.sin(angle) * distance - Math.abs(Math.sin(angle)) * 50; // Bias upward
-        
-        confetti.style.setProperty('--random-x', randomX);
-        confetti.style.setProperty('--random-y', randomY);
-        confetti.style.left = startX + 'px';
-        confetti.style.top = startY + 'px';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.width = (Math.random() * 10 + 5) + 'px';
-        confetti.style.height = (Math.random() * 10 + 5) + 'px';
-        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
-        confetti.style.animationDelay = Math.random() * 0.3 + 's';
-        confetti.style.animation = `confettiFall ${Math.random() * 2 + 2}s ease-out forwards`;
-        confettiContainer.appendChild(confetti);
-    }
-    
-    // Clean up confetti after animation
-    setTimeout(() => {
-        confettiContainer.innerHTML = '';
-    }, 5000);
-}
-
-/**
- * Handle envelope click
- */
-function handleEnvelopeClick() {
-    if (!isUnlocked()) {
-        showEarlyClickAnimation();
-        return;
-    }
-    
-    // Envelope is unlocked - proceed with opening animation
-    envelope.classList.add('opening');
-    
-    // Create confetti after a short delay
-    setTimeout(() => {
-        createConfetti();
-    }, 300);
-    
-    // Transition to text screen after envelope opens
-    setTimeout(() => {
-        landingScreen.classList.remove('active');
-        setTimeout(() => {
-            textScreen.classList.add('active');
-            startTextSequence();
-        }, 1000);
-    }, 1000);
-}
-
-// Add click listener to envelope
-envelope.addEventListener('click', handleEnvelopeClick);
-
-// ============================================
-// TEXT SEQUENCE ANIMATION
-// ============================================
-
-const textLines = [
-    { id: 'text-line-1', duration: 2500 },
-    { id: 'text-line-2', duration: 2500 },
-    { id: 'text-line-3', duration: 2500 },
-    { id: 'text-line-4', duration: 2500 }
-];
-
-/**
- * Animate text lines sequentially
- */
-function startTextSequence() {
-    let currentIndex = 0;
-    
-    function showNextLine() {
-        if (currentIndex >= textLines.length) {
-            // All lines shown, transition to map
-            setTimeout(() => {
-                textScreen.classList.remove('active');
-                setTimeout(() => {
-                    mapScreen.classList.add('active');
-                    startMapAnimation();
-                }, 1000);
-            }, 1000);
-            return;
-        }
-        
-        const line = document.getElementById(textLines[currentIndex].id);
-        line.classList.remove('hidden');
-        line.classList.add('show');
-        
-        // Fade out after duration
-        setTimeout(() => {
-            line.classList.remove('show');
-            line.classList.add('hidden');
-            
-            // Wait for fade out, then show next line
-            setTimeout(() => {
-                currentIndex++;
-                showNextLine();
-            }, 1000);
-        }, textLines[currentIndex].duration);
-    }
-    
-    // Start showing lines after a brief delay
-    setTimeout(() => {
-        showNextLine();
-    }, 500);
-}
-
-// ============================================
-// MAP ANIMATION
-// ============================================
-
-const cityDots = [
-    { id: 'calgary-dot', name: 'Calgary' },
-    { id: 'dallas-dot', name: 'Dallas' },
-    { id: 'toronto-dot-1', name: 'Toronto' },
-    { id: 'toronto-dot-2', name: 'Toronto' },
-    { id: 'nyc-dot', name: 'New York City' }
-];
-
-const cityTooltip = document.getElementById('city-tooltip');
-
-/**
- * Animate city dots appearing one by one
- */
-function startMapAnimation() {
-    cityDots.forEach((city, index) => {
-        setTimeout(() => {
-            const dot = document.getElementById(city.id);
-            dot.classList.add('visible');
-            dot.setAttribute('data-city-name', city.name);
-            
-            // Add click and hover listeners
-            dot.addEventListener('click', () => handleCityClick(city.name, dot));
-            dot.addEventListener('mouseenter', (e) => showCityTooltip(city.name, e));
-            dot.addEventListener('mouseleave', hideCityTooltip);
-        }, index * 1000);
+    // Make all marbles swirl
+    const marbles = marblesContainer.querySelectorAll('.marble');
+    marbles.forEach(marble => {
+        marble.classList.add('swirling');
     });
+    
+    // Remove shake class after animation
+    setTimeout(() => {
+        jar.classList.remove('shaking');
+    }, 2000);
 }
 
 /**
- * Handle city dot click
- * This is structured for easy extension later
+ * Pop out a random marble and reveal memory
  */
-function handleCityClick(cityName, dotElement) {
-    // Placeholder for future interactions
-    console.log(`Clicked on ${cityName}`);
-    // You can add specific interactions here later
+function popMarble() {
+    // Select random memory
+    const randomIndex = Math.floor(Math.random() * memories.length);
+    const selectedMemory = memories[randomIndex];
+    
+    // Find the marble with this memory ID
+    const marbles = marblesContainer.querySelectorAll('.marble');
+    const selectedMarble = Array.from(marbles).find(
+        m => parseInt(m.getAttribute('data-memory-id')) === selectedMemory.id
+    );
+    
+    if (selectedMarble) {
+        // Make the selected marble pop out
+        selectedMarble.classList.remove('swirling');
+        selectedMarble.classList.add('popping');
+        
+        // Set revealed marble color
+        revealedMarble.style.backgroundColor = selectedMemory.color;
+        revealedMarble.style.color = selectedMemory.color;
+        
+        // After marble pops, transition to memory scene
+        setTimeout(() => {
+            revealMemory(selectedMemory);
+        }, 1500);
+    }
 }
+
+// ============================================
+// MEMORY REVEAL
+// ============================================
 
 /**
- * Show tooltip on hover (desktop)
+ * Reveal the selected memory
  */
-function showCityTooltip(cityName, event) {
-    const dot = event.target;
-    const bbox = dot.getBBox();
-    cityTooltip.textContent = cityName;
-    cityTooltip.setAttribute('x', bbox.x + bbox.width / 2);
-    cityTooltip.setAttribute('y', bbox.y - 15);
-    cityTooltip.setAttribute('opacity', '1');
-}
-
-/**
- * Hide tooltip
- */
-function hideCityTooltip() {
-    cityTooltip.setAttribute('opacity', '0');
-}
-
-// Handle mobile tap events
-cityDots.forEach(city => {
-    const dot = document.getElementById(city.id);
-    if (dot) {
-        dot.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            const tooltip = document.createElement('div');
-            tooltip.textContent = city.name;
-            tooltip.style.position = 'fixed';
-            tooltip.style.background = 'rgba(255, 105, 180, 0.9)';
-            tooltip.style.color = 'white';
-            tooltip.style.padding = '8px 12px';
-            tooltip.style.borderRadius = '8px';
-            tooltip.style.fontSize = '14px';
-            tooltip.style.fontFamily = 'Poppins, sans-serif';
-            tooltip.style.pointerEvents = 'none';
-            tooltip.style.zIndex = '1000';
-            tooltip.style.left = e.touches[0].clientX + 'px';
-            tooltip.style.top = (e.touches[0].clientY - 40) + 'px';
-            document.body.appendChild(tooltip);
-            
-            setTimeout(() => {
-                tooltip.remove();
-            }, 2000);
+function revealMemory(memory) {
+    // Show revealed marble animation
+    revealedMarble.classList.remove('hidden');
+    
+    // After marble expands, show memory content
+    setTimeout(() => {
+        revealedMarble.classList.add('hidden');
+        
+        // Set memory content
+        memoryPhoto.src = memory.photo;
+        memoryPhoto.alt = `Memory ${memory.id}`;
+        memoryText.textContent = memory.text;
+        
+        // Show memory content
+        memoryContent.classList.remove('hidden');
+        memoryContent.classList.add('show');
+        backBtn.classList.remove('hidden');
+        
+        // Switch scenes
+        jarScene.classList.remove('active');
+        memoryScene.classList.add('active');
+        
+        // Reset for next use
+        isAnimating = false;
+        insertCoinBtn.disabled = false;
+        
+        // Reset marbles
+        const marbles = marblesContainer.querySelectorAll('.marble');
+        marbles.forEach(marble => {
+            marble.classList.remove('swirling', 'popping');
         });
+    }, 2000);
+}
+
+// ============================================
+// BACK TO JAR
+// ============================================
+
+/**
+ * Return to jar scene
+ */
+backBtn.addEventListener('click', () => {
+    // Hide memory content
+    memoryContent.classList.add('hidden');
+    memoryContent.classList.remove('show');
+    backBtn.classList.add('hidden');
+    
+    // Switch scenes
+    memoryScene.classList.remove('active');
+    jarScene.classList.add('active');
+    
+    // Reinitialize marbles for next use
+    setTimeout(() => {
+        initializeMarbles();
+    }, 500);
+});
+
+// ============================================
+// HANDLE MISSING IMAGES
+// ============================================
+
+/**
+ * Handle missing image files gracefully
+ */
+memoryPhoto.addEventListener('error', function() {
+    // Create a placeholder if image fails to load
+    this.style.display = 'none';
+    const placeholder = document.createElement('div');
+    placeholder.style.cssText = `
+        width: 100%;
+        max-width: 500px;
+        height: 300px;
+        background: linear-gradient(135deg, #ffb3d9 0%, #e6ccff 100%);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+        font-family: 'Poppins', sans-serif;
+    `;
+    placeholder.textContent = '💕 Memory Photo 💕';
+    
+    if (!this.parentElement.querySelector('.image-placeholder')) {
+        placeholder.className = 'image-placeholder';
+        this.parentElement.appendChild(placeholder);
     }
 });
 
 // ============================================
-// INITIALIZATION
+// ADDITIONAL ENHANCEMENTS
 // ============================================
 
-// Update unlock message based on current time
-function updateUnlockMessage() {
-    if (isUnlocked()) {
-        unlockMessage.textContent = 'Click to open! 💕';
-        envelope.style.cursor = 'pointer';
-    } else {
-        const now = new Date();
-        const timeUntil = UNLOCK_DATE_UTC - now;
-        const days = Math.floor(timeUntil / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeUntil % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeUntil % (1000 * 60 * 60)) / (1000 * 60));
+/**
+ * Add subtle mouse tracking to jar (optional enhancement)
+ */
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (e) => {
+    if (!isAnimating && jarScene.classList.contains('active')) {
+        mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+        mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
         
-        if (days > 0) {
-            unlockMessage.textContent = `This gift unlocks on December 13th, 2025 at 12:00 AM EST. (${days} day${days > 1 ? 's' : ''} remaining)`;
-        } else if (hours > 0) {
-            unlockMessage.textContent = `This gift unlocks on December 13th, 2025 at 12:00 AM EST. (${hours} hour${hours > 1 ? 's' : ''} remaining)`;
-        } else {
-            unlockMessage.textContent = `This gift unlocks on December 13th, 2025 at 12:00 AM EST. (${minutes} minute${minutes > 1 ? 's' : ''} remaining)`;
-        }
+        jar.style.transform = `translate(${mouseX}px, ${mouseY}px)`;
     }
-}
+});
 
-// Update message on load and periodically
-updateUnlockMessage();
-setInterval(updateUnlockMessage, 60000); // Update every minute
-
+// Reset jar position when mouse leaves
+document.addEventListener('mouseleave', () => {
+    jar.style.transform = 'translate(0, 0)';
+});
