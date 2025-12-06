@@ -9,7 +9,7 @@
 
 body {
     font-family: 'Poppins', 'Quicksand', sans-serif;
-    background: #ffffff;
+    background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 50%, #ff99cc 100%);
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
@@ -47,8 +47,6 @@ body {
     justify-content: center;
     gap: 30px;
     z-index: 10;
-    perspective: 1000px;
-    perspective-origin: center center;
 }
 
 /* Envelope styling - cute pink, glossy */
@@ -57,47 +55,16 @@ body {
     width: 200px;
     height: 150px;
     cursor: pointer;
-    transform-style: preserve-3d;
-    transform-origin: center center;
-    /* Remove transition to allow smooth JS animation */
-}
-
-/* Envelope front and back faces */
-.envelope-front,
-.envelope-back {
-    position: absolute;
-    width: 200px;
-    height: 150px;
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-}
-
-.envelope-front {
-    transform: rotateY(0deg) translateZ(2px);
-}
-
-.envelope-back {
-    transform: rotateY(180deg) translateZ(-2px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #ffb3d9 0%, #ff99cc 50%, #ff80b3 100%);
-    border-radius: 8px;
-    box-shadow: 
-        0 10px 30px rgba(255, 105, 180, 0.4),
-        0 5px 15px rgba(255, 105, 180, 0.2),
-        inset 0 2px 10px rgba(255, 255, 255, 0.4),
-        inset 0 -2px 10px rgba(255, 105, 180, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    transform-origin: center;
 }
 
 /* Idle floating animation */
 @keyframes float {
     0%, 100% {
-        transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px);
+        transform: translateY(0px);
     }
     50% {
-        transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(-10px);
+        transform: translateY(-10px);
     }
 }
 
@@ -119,83 +86,51 @@ body {
     position: relative;
     z-index: 1;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    backface-visibility: visible;
 }
 
-/* Envelope back text styling */
-.envelope-back-text {
-    text-align: center;
-    color: #ff66b3;
-    font-family: 'Poppins', 'Quicksand', sans-serif;
-    font-weight: 500;
-    line-height: 1.6;
-    padding: 20px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 1;
-}
-
-.back-line-1 {
-    font-size: 20px;
-    margin-bottom: 8px;
-}
-
-.back-line-2 {
-    font-size: 18px;
-    margin-bottom: 12px;
-}
-
-.back-line-3 {
-    font-size: 16px;
-    font-style: italic;
-}
-
-/* Envelope flap - triangular shape */
+/* Envelope flap */
 .envelope-flap {
     width: 200px;
     height: 80px;
     background: linear-gradient(135deg, #ff99cc 0%, #ff80b3 50%, #ff66b3 100%);
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-radius: 8px 8px 0 0;
+    box-shadow: 
+        0 -5px 20px rgba(255, 105, 180, 0.4),
+        0 -2px 10px rgba(255, 105, 180, 0.2),
+        inset 0 2px 10px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 5px rgba(255, 105, 180, 0.2);
     position: absolute;
     top: 0;
     left: 0;
     transform-origin: top center;
     transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    z-index: 3;
-    box-shadow: 
-        0 -5px 20px rgba(255, 105, 180, 0.4),
-        0 -2px 10px rgba(255, 105, 180, 0.2),
-        inset 0 2px 10px rgba(255, 255, 255, 0.3);
-    backface-visibility: visible;
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: none;
 }
 
 /* Envelope opening animation */
 .envelope.opening .envelope-flap {
-    transform: rotateX(-180deg) translateZ(0);
+    transform: rotateX(-180deg);
 }
 
 /* Shake animation for early clicks */
 @keyframes shake {
-    0%, 100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateX(0) translateY(0); }
-    10%, 30%, 50%, 70%, 90% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateX(-10px) translateY(0) rotate(-2deg); }
-    20%, 40%, 60%, 80% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateX(10px) translateY(0) rotate(2deg); }
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) rotate(-2deg); }
+    20%, 40%, 60%, 80% { transform: translateX(10px) rotate(2deg); }
 }
 
 .envelope.shaking {
-    animation: shake 0.5s ease-in-out !important;
+    animation: shake 0.5s ease-in-out;
 }
 
 /* Rapid shake for opening */
 @keyframes rapidShake {
-    0%, 100% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateX(0) translateY(0); }
-    25% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateX(-5px) translateY(-3px) rotate(-1deg); }
-    50% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateX(5px) translateY(3px) rotate(1deg); }
-    75% { transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateX(-3px) translateY(-2px) rotate(-0.5deg); }
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(-5px) translateY(-3px) rotate(-1deg); }
+    50% { transform: translateX(5px) translateY(3px) rotate(1deg); }
+    75% { transform: translateX(-3px) translateY(-2px) rotate(-0.5deg); }
 }
 
 .envelope.opening {
@@ -267,12 +202,14 @@ body {
 }
 
 .confetti {
-    position: fixed;
+    position: absolute;
     width: 10px;
     height: 10px;
     background: #ff69b4;
-    opacity: 1;
-    transform-origin: center center;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
 }
 
 .confetti:nth-child(1) { background: #ff69b4; }
@@ -286,24 +223,14 @@ body {
 .confetti:nth-child(9) { background: #ffb3d9; }
 .confetti:nth-child(10) { background: #ff80b3; }
 
-@keyframes confettiShootAndFall {
+@keyframes confettiFall {
     0% {
         opacity: 1;
-        left: var(--start-x, 50%);
-        top: var(--start-y, 50%);
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    25% {
-        opacity: 1;
-        left: var(--shoot-x, 50%);
-        top: var(--shoot-y, 50%);
-        transform: translate(-50%, -50%) rotate(calc(var(--rotation, 0deg) * 0.3));
+        transform: translate(-50%, -50%) translateY(0) translateX(0) rotate(0deg);
     }
     100% {
-        opacity: 0.7;
-        left: var(--final-x, 50%);
-        top: var(--final-y, 100vh);
-        transform: translate(-50%, -50%) rotate(var(--rotation, 720deg));
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(calc(var(--random-y, 100vh) + 100vh)) translateX(var(--random-x, 0px)) rotate(720deg);
     }
 }
 
@@ -311,7 +238,7 @@ body {
    TEXT SEQUENCE SCREEN
    ============================================ */
 #text-screen {
-    background: #ffffff;
+    background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 50%, #ff99cc 100%);
 }
 
 .text-container {
@@ -342,7 +269,7 @@ body {
    MAP SCREEN
    ============================================ */
 #map-screen {
-    background: #ffffff;
+    background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 50%, #ff99cc 100%);
 }
 
 .map-container {
@@ -367,20 +294,10 @@ body {
 }
 
 /* City dots */
-.city-dot-group {
-    cursor: pointer;
-}
-
-.city-dot-hover {
-    cursor: pointer;
-}
-
 .city-dot {
     cursor: pointer;
-    transition: filter 0.3s ease;
+    transition: all 0.3s ease;
     filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
-    transform-origin: center center;
-    pointer-events: none;
 }
 
 .city-dot.visible {
@@ -391,13 +308,15 @@ body {
 @keyframes dotGlow {
     0%, 100% {
         filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
+        transform: scale(1);
     }
     50% {
         filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.9));
+        transform: scale(1.2);
     }
 }
 
-.city-dot-group:hover .city-dot {
+.city-dot:hover {
     filter: drop-shadow(0 0 20px rgba(255, 105, 180, 1));
     transform: scale(1.3);
 }

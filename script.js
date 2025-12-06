@@ -23,11 +23,10 @@ function getCurrentTimeEST() {
 /**
  * Check if the unlock time has been reached
  * Compares current UTC time with unlock UTC time
- * TEMPORARILY DISABLED FOR TESTING
  */
 function isUnlocked() {
-    // return now >= UNLOCK_DATE_UTC;
-    return true; // Always unlocked for testing
+    const now = new Date();
+    return now >= UNLOCK_DATE_UTC;
 }
 
 // ============================================
@@ -39,9 +38,11 @@ const landingScreen = document.getElementById('landing-screen');
 const textScreen = document.getElementById('text-screen');
 const mapScreen = document.getElementById('map-screen');
 const unlockMessage = document.getElementById('unlock-message');
+const earlyMessage = document.getElementById('early-message');
 const confettiContainer = document.getElementById('confetti-container');
 
 // ============================================
+<<<<<<< HEAD
 // 3D MOUSE TRACKING
 // ============================================
 
@@ -117,92 +118,79 @@ function setup3DMouseTracking() {
 setup3DMouseTracking();
 
 // ============================================
+=======
+>>>>>>> 474e1df233f80ea416979649e4d454d8c7299e2f
 // ENVELOPE INTERACTIONS
 // ============================================
 
 /**
- * Show shake animation for early clicks
+ * Show shake animation and early message
  */
 function showEarlyClickAnimation() {
     envelope.classList.add('shaking');
+    earlyMessage.classList.remove('hidden');
+    earlyMessage.classList.add('show');
     
     setTimeout(() => {
         envelope.classList.remove('shaking');
-        // Re-enable animation after shaking stops
-        envelope.style.animation = '';
+        earlyMessage.classList.remove('show');
+        setTimeout(() => {
+            earlyMessage.classList.add('hidden');
+        }, 2000);
     }, 500);
 }
 
 /**
- * Create confetti explosion - shoots up then rains down like snow
+ * Create confetti explosion from top of envelope
  */
 function createConfetti() {
-    const confettiCount = 100;
+    const confettiCount = 50;
     const colors = ['#ff69b4', '#ff99cc', '#ffb3d9', '#ff80b3', '#ff66b3', '#ff1493'];
     
-    // Get envelope position for starting point
+    // Get envelope position to calculate top center
     const envelopeRect = envelope.getBoundingClientRect();
-    const startX = envelopeRect.left + envelopeRect.width / 2;
-    const startY = envelopeRect.top + envelopeRect.height / 2;
+    const startX = envelopeRect.left + envelopeRect.width / 2; // Top center X
+    const startY = envelopeRect.top; // Top center Y
     
     for (let i = 0; i < confettiCount; i++) {
         const confetti = document.createElement('div');
         confetti.className = 'confetti';
         
-        // Random horizontal spread across the page
-        const randomX = (Math.random() - 0.5) * window.innerWidth * 1.5;
-        const randomY = Math.random() * window.innerHeight;
-        const randomRotation = Math.random() * 720; // 0-720 degrees
-        const randomSize = Math.random() * 8 + 4; // 4-12px
-        const fallDuration = Math.random() * 3 + 3; // 3-6 seconds
-        const shootUpHeight = Math.random() * 100 + 50; // 50-150px up
+        // Random spread angles and distances
+        const angle = (Math.random() - 0.5) * Math.PI * 1.5; // Spread mostly upward and outward
+        const distance = Math.random() * 300 + 100; // How far to travel
+        const randomX = Math.cos(angle) * distance;
+        const randomY = Math.sin(angle) * distance - Math.abs(Math.sin(angle)) * 50; // Bias upward
         
+        confetti.style.setProperty('--random-x', randomX);
+        confetti.style.setProperty('--random-y', randomY);
         confetti.style.left = startX + 'px';
         confetti.style.top = startY + 'px';
         confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.width = randomSize + 'px';
-        confetti.style.height = randomSize + 'px';
+        confetti.style.width = (Math.random() * 10 + 5) + 'px';
+        confetti.style.height = (Math.random() * 10 + 5) + 'px';
         confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0%';
-        confetti.style.animationDelay = Math.random() * 0.2 + 's';
-        
-        // Calculate final positions
-        const finalX = startX + randomX;
-        const finalY = startY + randomY + window.innerHeight;
-        const shootUpY = startY - shootUpHeight;
-        
-        confetti.style.setProperty('--start-x', startX + 'px');
-        confetti.style.setProperty('--start-y', startY + 'px');
-        confetti.style.setProperty('--shoot-x', (startX + randomX * 0.3) + 'px');
-        confetti.style.setProperty('--shoot-y', shootUpY + 'px');
-        confetti.style.setProperty('--final-x', finalX + 'px');
-        confetti.style.setProperty('--final-y', finalY + 'px');
-        confetti.style.setProperty('--rotation', randomRotation + 'deg');
-        confetti.style.animation = `confettiShootAndFall ${fallDuration}s ease-in-out forwards`;
-        
+        confetti.style.animationDelay = Math.random() * 0.3 + 's';
+        confetti.style.animation = `confettiFall ${Math.random() * 2 + 2}s ease-out forwards`;
         confettiContainer.appendChild(confetti);
     }
     
     // Clean up confetti after animation
     setTimeout(() => {
         confettiContainer.innerHTML = '';
-    }, 10000);
+    }, 5000);
 }
 
 /**
  * Handle envelope click
  */
-function handleEnvelopeClick(e) {
-    e.stopPropagation();
-    console.log('Envelope clicked, isUnlocked:', isUnlocked());
-    
+function handleEnvelopeClick() {
     if (!isUnlocked()) {
         showEarlyClickAnimation();
         return;
     }
     
     // Envelope is unlocked - proceed with opening animation
-    // Temporarily disable 3D mouse tracking during opening
-    envelope.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
     envelope.classList.add('opening');
     
     // Create confetti after a short delay
@@ -300,14 +288,10 @@ function startMapAnimation() {
             dot.classList.add('visible');
             dot.setAttribute('data-city-name', city.name);
             
-            // Find the parent group for hover detection
-            const group = dot.parentElement;
-            if (group && group.classList.contains('city-dot-group')) {
-                // Add click and hover listeners to the group (which has the invisible hover area)
-                group.addEventListener('click', () => handleCityClick(city.name, dot));
-                group.addEventListener('mouseenter', (e) => showCityTooltip(city.name, dot));
-                group.addEventListener('mouseleave', hideCityTooltip);
-            }
+            // Add click and hover listeners
+            dot.addEventListener('click', () => handleCityClick(city.name, dot));
+            dot.addEventListener('mouseenter', (e) => showCityTooltip(city.name, e));
+            dot.addEventListener('mouseleave', hideCityTooltip);
         }, index * 1000);
     });
 }
@@ -325,8 +309,9 @@ function handleCityClick(cityName, dotElement) {
 /**
  * Show tooltip on hover (desktop)
  */
-function showCityTooltip(cityName, dotElement) {
-    const bbox = dotElement.getBBox();
+function showCityTooltip(cityName, event) {
+    const dot = event.target;
+    const bbox = dot.getBBox();
     cityTooltip.textContent = cityName;
     cityTooltip.setAttribute('x', bbox.x + bbox.width / 2);
     cityTooltip.setAttribute('y', bbox.y - 15);
