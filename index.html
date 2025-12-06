@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday! 💕</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Landing Screen with Envelope -->
+    <div id="landing-screen" class="screen active">
+        <div class="envelope-container">
+            <div id="envelope" class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+            </div>
+            <p id="unlock-message" class="unlock-message">
+                This gift unlocks on December 13th, 2025 at 12:00 AM EST.
+            </p>
+            <div id="early-message" class="early-message hidden">Not yet… patience 😊</div>
+        </div>
+        <div id="confetti-container"></div>
+    </div>
+
+    <!-- Text Sequence Screen -->
+    <div id="text-screen" class="screen">
+        <div class="text-container">
+            <div id="text-line-1" class="text-line hidden">We met on Jan 1st 2025, that's the first day of the year.</div>
+            <div id="text-line-2" class="text-line hidden">"Isn't that a little poetic?" – Angie</div>
+            <div id="text-line-3" class="text-line hidden">"Yea, truly an amazing start to 2025… I remember I just got my wisdom teeth removed then." – Luke</div>
+            <div id="text-line-4" class="text-line hidden">I'm really glad I could spend 2025 with you. Truly, you have been a blessing in my life.</div>
+        </div>
+    </div>
+
+    <!-- Map Screen -->
+    <div id="map-screen" class="screen">
+        <div class="map-container">
+            <svg id="north-america-map" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+                <!-- Simplified North America outline (pixel-art style) -->
+                <!-- Main continent shape -->
+                <path class="map-outline" d="M 80 80 L 120 70 L 160 75 L 200 80 L 240 85 L 280 90 L 320 95 L 360 100 L 400 105 L 440 110 L 480 115 L 520 120 L 560 125 L 600 130 L 640 135 L 680 140 L 700 150 L 710 170 L 715 200 L 710 230 L 700 260 L 680 290 L 660 320 L 640 350 L 620 380 L 600 410 L 580 440 L 560 470 L 540 500 L 520 530 L 500 550 L 480 560 L 460 565 L 440 570 L 420 575 L 400 580 L 380 585 L 360 590 L 340 595 L 320 600 L 300 595 L 280 590 L 260 585 L 240 580 L 220 575 L 200 570 L 180 565 L 160 560 L 140 555 L 120 550 L 100 540 L 80 520 L 70 490 L 65 460 L 60 430 L 55 400 L 50 370 L 45 340 L 40 310 L 35 280 L 30 250 L 25 220 L 20 190 L 15 160 L 12 130 L 10 100 L 15 80 L 25 70 L 40 75 L 60 80 Z" fill="rgba(255, 182, 193, 0.2)" stroke="#ffb3d9" stroke-width="2"/>
+                
+                <!-- City dots (initially hidden) - positioned approximately -->
+                <!-- Calgary, Canada -->
+                <circle id="calgary-dot" class="city-dot" cx="220" cy="140" r="8" fill="#ff69b4" opacity="0"/>
+                <!-- Dallas, Texas -->
+                <circle id="dallas-dot" class="city-dot" cx="380" cy="380" r="8" fill="#ff69b4" opacity="0"/>
+                <!-- Toronto, Canada (first dot) -->
+                <circle id="toronto-dot-1" class="city-dot" cx="480" cy="180" r="8" fill="#ff69b4" opacity="0"/>
+                <!-- Toronto, Canada (second dot) -->
+                <circle id="toronto-dot-2" class="city-dot" cx="490" cy="185" r="8" fill="#ff69b4" opacity="0"/>
+                <!-- New York City -->
+                <circle id="nyc-dot" class="city-dot" cx="570" cy="220" r="8" fill="#ff69b4" opacity="0"/>
+                
+                <!-- Tooltip for city names -->
+                <text id="city-tooltip" class="city-tooltip" x="0" y="0" opacity="0">City Name</text>
+            </svg>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

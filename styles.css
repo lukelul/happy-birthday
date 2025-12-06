@@ -1,0 +1,399 @@
+/* ============================================
+   GLOBAL STYLES & RESET
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Quicksand', sans-serif;
+    background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 50%, #ff99cc 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* ============================================
+   SCREEN MANAGEMENT
+   ============================================ */
+.screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+}
+
+.screen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ============================================
+   LANDING SCREEN - ENVELOPE
+   ============================================ */
+.envelope-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    z-index: 10;
+}
+
+/* Envelope styling - cute pink, glossy */
+.envelope {
+    position: relative;
+    width: 200px;
+    height: 150px;
+    cursor: pointer;
+    transform-origin: center;
+}
+
+/* Idle floating animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.envelope:not(.opening):not(.shaking) {
+    animation: float 3s ease-in-out infinite;
+}
+
+/* Envelope body */
+.envelope-body {
+    width: 200px;
+    height: 120px;
+    background: linear-gradient(135deg, #ffb3d9 0%, #ff99cc 50%, #ff80b3 100%);
+    border-radius: 8px 8px 4px 4px;
+    box-shadow: 
+        0 10px 30px rgba(255, 105, 180, 0.4),
+        0 5px 15px rgba(255, 105, 180, 0.2),
+        inset 0 2px 10px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 10px rgba(255, 105, 180, 0.3);
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Envelope flap */
+.envelope-flap {
+    width: 200px;
+    height: 80px;
+    background: linear-gradient(135deg, #ff99cc 0%, #ff80b3 50%, #ff66b3 100%);
+    border-radius: 8px 8px 0 0;
+    box-shadow: 
+        0 -5px 20px rgba(255, 105, 180, 0.4),
+        0 -2px 10px rgba(255, 105, 180, 0.2),
+        inset 0 2px 10px rgba(255, 255, 255, 0.3),
+        inset 0 -1px 5px rgba(255, 105, 180, 0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform-origin: top center;
+    transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 2;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-bottom: none;
+}
+
+/* Envelope opening animation */
+.envelope.opening .envelope-flap {
+    transform: rotateX(-180deg);
+}
+
+/* Shake animation for early clicks */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) rotate(-2deg); }
+    20%, 40%, 60%, 80% { transform: translateX(10px) rotate(2deg); }
+}
+
+.envelope.shaking {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Rapid shake for opening */
+@keyframes rapidShake {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    25% { transform: translateX(-5px) translateY(-3px) rotate(-1deg); }
+    50% { transform: translateX(5px) translateY(3px) rotate(1deg); }
+    75% { transform: translateX(-3px) translateY(-2px) rotate(-0.5deg); }
+}
+
+.envelope.opening {
+    animation: rapidShake 0.3s ease-in-out;
+}
+
+/* Unlock message */
+.unlock-message {
+    color: #ff66b3;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+    padding: 0 20px;
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+/* Early click message */
+.early-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ff66b3;
+    font-size: 24px;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -30%);
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -80%);
+    }
+}
+
+.early-message.show {
+    animation: floatUp 2s ease-out;
+}
+
+.early-message.hidden {
+    display: none;
+}
+
+/* ============================================
+   CONFETTI ANIMATION
+   ============================================ */
+#confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+    overflow: hidden;
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ff69b4;
+    top: 50%;
+    left: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+}
+
+.confetti:nth-child(1) { background: #ff69b4; }
+.confetti:nth-child(2) { background: #ff99cc; }
+.confetti:nth-child(3) { background: #ffb3d9; }
+.confetti:nth-child(4) { background: #ff80b3; }
+.confetti:nth-child(5) { background: #ff66b3; }
+.confetti:nth-child(6) { background: #ff1493; }
+.confetti:nth-child(7) { background: #ff69b4; }
+.confetti:nth-child(8) { background: #ff99cc; }
+.confetti:nth-child(9) { background: #ffb3d9; }
+.confetti:nth-child(10) { background: #ff80b3; }
+
+@keyframes confettiFall {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0) translateX(0) rotate(0deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(calc(var(--random-y, 100vh) + 100vh)) translateX(var(--random-x, 0px)) rotate(720deg);
+    }
+}
+
+/* ============================================
+   TEXT SEQUENCE SCREEN
+   ============================================ */
+#text-screen {
+    background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 50%, #ff99cc 100%);
+}
+
+.text-container {
+    max-width: 800px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.text-line {
+    font-size: clamp(20px, 5vw, 32px);
+    color: #ff66b3;
+    font-weight: 400;
+    line-height: 1.8;
+    margin: 20px 0;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.text-line.show {
+    opacity: 1;
+}
+
+.text-line.hidden {
+    opacity: 0;
+}
+
+/* ============================================
+   MAP SCREEN
+   ============================================ */
+#map-screen {
+    background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 50%, #ff99cc 100%);
+}
+
+.map-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#north-america-map {
+    width: 100%;
+    height: auto;
+    max-height: 80vh;
+}
+
+.map-outline {
+    fill: rgba(255, 182, 193, 0.2);
+    stroke: #ffb3d9;
+    stroke-width: 2;
+}
+
+/* City dots */
+.city-dot {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
+}
+
+.city-dot.visible {
+    opacity: 1 !important;
+    animation: dotGlow 1s ease-in-out;
+}
+
+@keyframes dotGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.5));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.9));
+        transform: scale(1.2);
+    }
+}
+
+.city-dot:hover {
+    filter: drop-shadow(0 0 20px rgba(255, 105, 180, 1));
+    transform: scale(1.3);
+}
+
+.city-tooltip {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    fill: #ff66b3;
+    font-weight: 500;
+    pointer-events: none;
+    text-anchor: middle;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+    .envelope {
+        width: 150px;
+        height: 112px;
+    }
+    
+    .envelope-body {
+        width: 150px;
+        height: 90px;
+    }
+    
+    .envelope-flap {
+        width: 150px;
+        height: 60px;
+    }
+    
+    .unlock-message {
+        font-size: 14px;
+        padding: 0 15px;
+    }
+    
+    .early-message {
+        font-size: 20px;
+    }
+    
+    .text-line {
+        font-size: clamp(18px, 6vw, 24px);
+        margin: 15px 0;
+    }
+    
+    #north-america-map {
+        max-height: 70vh;
+    }
+    
+    .city-dot {
+        r: 6;
+    }
+}
+
+@media (max-width: 480px) {
+    .envelope {
+        width: 120px;
+        height: 90px;
+    }
+    
+    .envelope-body {
+        width: 120px;
+        height: 72px;
+    }
+    
+    .envelope-flap {
+        width: 120px;
+        height: 48px;
+    }
+    
+    .unlock-message {
+        font-size: 12px;
+    }
+    
+    .text-line {
+        font-size: clamp(16px, 7vw, 20px);
+    }
+}
+
