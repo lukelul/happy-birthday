@@ -11,8 +11,8 @@ function getPhotoPath(num) {
 
 // Helper function to try loading image with different extensions
 function tryLoadImage(img, basePath) {
-    // Try HEIC first since user has HEIC files, then other formats
-    const extensions = ['.HEIC', '.heic', '.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png'];
+    // Prioritize JPG and PNG since most photos are converted, then HEIC as fallback
+    const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG', '.HEIC', '.heic'];
     let currentIndex = 0;
     let isLoaded = false;
     
