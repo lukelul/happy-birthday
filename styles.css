@@ -1052,13 +1052,16 @@ body {
     background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 105, 180, 0.2) 100%);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    max-height: 300px;
 }
 
 .memory-detail-photo {
     width: 100%;
-    height: auto;
+    height: 100%;
+    max-height: 300px;
     display: block;
     object-fit: cover;
+    object-position: center;
     border-radius: 20px;
     transition: all 0.3s ease;
     position: relative;
@@ -1067,6 +1070,7 @@ body {
 .memory-detail-photo-wrapper:hover {
     z-index: 1000;
     overflow: visible;
+    max-height: none;
 }
 
 .memory-detail-photo-wrapper:hover .memory-detail-photo {
