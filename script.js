@@ -776,11 +776,8 @@ function showMemoryDetail(memory) {
             <div class="memory-detail-content">
                 <button class="memory-detail-close">×</button>
                 <div class="memory-detail-marble"></div>
-                <div class="memory-detail-photo-frame">
-                    <img class="memory-detail-photo" src="" alt="Memory">
-                    <div class="memory-detail-placeholder" style="display: none;">
-                        <span>💕</span>
-                    </div>
+                <div class="memory-detail-photos-container">
+                    <!-- Photos will be dynamically added here -->
                 </div>
                 <div class="memory-detail-text">
                     <p></p>
@@ -804,33 +801,63 @@ function showMemoryDetail(memory) {
     
     // Update content
     const marble = detailView.querySelector('.memory-detail-marble');
-    const photo = detailView.querySelector('.memory-detail-photo');
-    const placeholder = detailView.querySelector('.memory-detail-placeholder');
     const text = detailView.querySelector('.memory-detail-text p');
-    const photoContainer = detailView.querySelector('.memory-detail-photo-frame');
+    const photoContainer = detailView.querySelector('.memory-detail-photos-container');
     
     marble.style.backgroundColor = memory.color;
     marble.style.color = memory.color;
     text.textContent = memory.text;
     
     // Clear existing photos
-    photoContainer.innerHTML = `
-        <img class="memory-detail-photo" src="" alt="Memory">
-        <div class="memory-detail-placeholder" style="display: none;">
-            <span>💕</span>
-        </div>
-    `;
+    photoContainer.innerHTML = '';
     
-    const newPhoto = photoContainer.querySelector('.memory-detail-photo');
-    const newPlaceholder = photoContainer.querySelector('.memory-detail-placeholder');
+    // Load all photos - filter out duplicate paths (same photo number with different extensions)
+    const photos = memory.photos || [];
+    // Get unique photo numbers (remove extension variations)
+    const uniquePhotos = [];
+    const seen = new Set();
     
-    // Load first photo with fallback extensions
-    const firstPhoto = memory.photos && memory.photos.length > 0 ? memory.photos[0] : '';
-    if (firstPhoto) {
-        tryLoadImage(newPhoto, firstPhoto);
+    photos.forEach(photoPath => {
+        if (!photoPath) return;
+        // Extract photo number (e.g., "images/1.jpg" -> "1")
+        const match = photoPath.match(/images\/(\d+)/);
+        if (match) {
+            const photoNum = match[1];
+            if (!seen.has(photoNum)) {
+                seen.add(photoNum);
+                uniquePhotos.push(photoPath);
+            }
+        }
+    });
+    
+    if (uniquePhotos.length > 0) {
+        uniquePhotos.forEach((photoPath, index) => {
+            const photoWrapper = document.createElement('div');
+            photoWrapper.className = 'memory-detail-photo-wrapper';
+            
+            const img = document.createElement('img');
+            img.className = 'memory-detail-photo';
+            img.alt = `Memory ${memory.id} - Photo ${index + 1}`;
+            
+            const placeholder = document.createElement('div');
+            placeholder.className = 'memory-detail-placeholder';
+            placeholder.style.display = 'none';
+            placeholder.innerHTML = '<span>💕</span>';
+            
+            photoWrapper.appendChild(img);
+            photoWrapper.appendChild(placeholder);
+            photoContainer.appendChild(photoWrapper);
+            
+            // Try loading image with fallback extensions
+            tryLoadImage(img, photoPath);
+        });
     } else {
-        newPhoto.style.display = 'none';
-        newPlaceholder.style.display = 'flex';
+        // No photos, show placeholder
+        const placeholder = document.createElement('div');
+        placeholder.className = 'memory-detail-placeholder';
+        placeholder.style.display = 'flex';
+        placeholder.innerHTML = '<span>💕</span>';
+        photoContainer.appendChild(placeholder);
     }
     
     // Show detail view
