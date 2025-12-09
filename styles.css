@@ -526,15 +526,19 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 30px;
-    animation: fadeInUp 1s ease-out 1.5s forwards;
     opacity: 0;
+    animation: none; /* Remove default animation, will be controlled by JS */
 }
 
 .memory-content.hidden {
     display: none;
+    opacity: 0;
+    animation: none;
 }
 
 .memory-content.show {
+    display: flex;
+    animation: fadeInUp 1s ease-out forwards;
     opacity: 1;
 }
 

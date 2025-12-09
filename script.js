@@ -514,26 +514,31 @@ function popMarble() {
  * Reveal the selected memory
  */
 function revealMemory(memory) {
+    // First, switch to memory scene (but keep it hidden initially)
+    jarScene.classList.remove('active');
+    memoryScene.classList.add('active');
+    
     // Show revealed marble animation
     revealedMarble.classList.remove('hidden');
     
+    // Set memory content data (but keep it hidden)
+    memoryPhoto.src = memory.photo;
+    memoryPhoto.alt = `Memory ${memory.id}`;
+    memoryText.textContent = memory.text;
+    
+    // Ensure memory content is hidden initially
+    memoryContent.classList.add('hidden');
+    memoryContent.classList.remove('show');
+    backBtn.classList.add('hidden');
+    
     // After marble expands, show memory content
-            setTimeout(() => {
+    setTimeout(() => {
         revealedMarble.classList.add('hidden');
         
-        // Set memory content
-        memoryPhoto.src = memory.photo;
-        memoryPhoto.alt = `Memory ${memory.id}`;
-        memoryText.textContent = memory.text;
-        
-        // Show memory content
+        // Now show memory content (scene is already switched)
         memoryContent.classList.remove('hidden');
         memoryContent.classList.add('show');
         backBtn.classList.remove('hidden');
-        
-        // Switch scenes
-        jarScene.classList.remove('active');
-        memoryScene.classList.add('active');
         
         // Reset for next use
         isAnimating = false;
