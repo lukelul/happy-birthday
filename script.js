@@ -965,15 +965,15 @@ document.addEventListener('mousemove', (e) => {
         jarTiltX = Math.max(-0.5, Math.min(0.5, mouseX * 0.5));
         jarTiltY = Math.max(-0.5, Math.min(0.5, mouseY * 0.5));
         
-        // Move jar visually
+        // Move jar visually (but don't affect marble physics)
         const translateX = mouseX * 20;
         const translateY = mouseY * 20;
         jar.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${jarTiltY * 5}deg) rotateY(${jarTiltX * 5}deg)`;
         
-        // Update gravity direction based on jar tilt
+        // Keep gravity constant - marbles don't move with mouse
         if (engine && isPhysicsInitialized) {
-            engine.world.gravity.x = jarTiltX * 0.4;
-            engine.world.gravity.y = 1.5 + jarTiltY * 0.4; // Base gravity of 1.5
+            engine.world.gravity.x = 0;
+            engine.world.gravity.y = 1.5; // Constant downward gravity
         }
     }
 });
