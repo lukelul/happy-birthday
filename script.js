@@ -190,14 +190,20 @@ function initializePhysics() {
  * Each marble represents a memory
  */
 function initializeMarbles() {
+    // Always reset physics to ensure clean state
+    if (isPhysicsInitialized && engine) {
+        // Clean up existing physics completely
+        World.clear(engine.world, false);
+        Engine.clear(engine);
+    }
+    
     marblesContainer.innerHTML = ''; // Clear existing marbles
     marbleBodies = [];
     marbleElements = [];
+    physicsUpdateRunning = false; // Reset physics update flag
     
-    // Initialize physics if not already done
-    if (!isPhysicsInitialized) {
-        initializePhysics();
-    }
+    // Initialize physics (will recreate if needed)
+    initializePhysics();
     
     // Get actual container dimensions
     const containerRect = marblesContainer.getBoundingClientRect();
@@ -556,7 +562,7 @@ if (backBtn) {
             jarScene.classList.add('active');
         }
         
-        // Reinitialize marbles for next use
+        // Reinitialize marbles for next use (all marbles will be recreated)
         setTimeout(() => {
             initializeMarbles();
         }, 500);
@@ -664,5 +670,50 @@ document.addEventListener('mouseleave', () => {
     if (engine && isPhysicsInitialized) {
         engine.world.gravity.x = 0;
         engine.world.gravity.y = 1.5; // Reset to base gravity
+    }
+});
+
+// ============================================
+// CLICK SPARKLE ANIMATION
+// ============================================
+
+/**
+ * Create sparkle animation at click position
+ */
+document.addEventListener('click', (e) => {
+    // Don't create sparkles on button clicks or interactive elements
+    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+        return;
+    }
+    
+    // Create multiple sparkle particles
+    const particleCount = 8;
+    for (let i = 0; i < particleCount; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'click-sparkle';
+        
+        // Calculate angle and distance for particle direction
+        const angle = (360 / particleCount) * i;
+        const distance = 30 + Math.random() * 20;
+        const radians = (angle * Math.PI) / 180;
+        const endX = Math.cos(radians) * distance;
+        const endY = Math.sin(radians) * distance;
+        
+        // Position at click location
+        sparkle.style.left = e.clientX + 'px';
+        sparkle.style.top = e.clientY + 'px';
+        
+        // Set animation end position
+        sparkle.style.setProperty('--end-x', endX + 'px');
+        sparkle.style.setProperty('--end-y', endY + 'px');
+        sparkle.style.animationDelay = (i * 0.03) + 's';
+        
+        // Add to body
+        document.body.appendChild(sparkle);
+        
+        // Remove after animation completes
+        setTimeout(() => {
+            sparkle.remove();
+        }, 1000);
     }
 });
