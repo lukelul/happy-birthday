@@ -331,14 +331,79 @@ insertCoinBtn.addEventListener('click', () => {
  * Play coin drop animation
  */
 function playCoinDropAnimation() {
-    coinAnimation.classList.remove('hidden');
-    coinAnimation.classList.add('dropping');
+    // Get coin slot position
+    const coinSlot = document.querySelector('.coin-slot');
+    if (!coinSlot) return;
     
-    // Reset animation after it completes
-        setTimeout(() => {
-        coinAnimation.classList.remove('dropping');
+    const slotRect = coinSlot.getBoundingClientRect();
+    const slotCenterX = slotRect.left + slotRect.width / 2;
+    const slotTop = slotRect.top;
+    const slotCenterY = slotRect.top + slotRect.height / 2;
+    
+    // Position coin above the slot (start position)
+    const startY = slotTop - 80; // Start 80px above the slot
+    const endY = slotCenterY; // End at center of slot
+    
+    // Calculate the distance to travel
+    const distance = endY - startY;
+    
+    // Set initial position
+    coinAnimation.style.left = slotCenterX + 'px';
+    coinAnimation.style.top = startY + 'px';
+    coinAnimation.style.transform = 'translate(-50%, 0)';
+    coinAnimation.style.width = '40px';
+    coinAnimation.style.height = '40px';
+    coinAnimation.style.borderRadius = '50%';
+    coinAnimation.style.opacity = '1';
+    
+    // Create keyframe animation dynamically
+    const keyframes = [
+        {
+            top: startY + 'px',
+            transform: 'translate(-50%, 0) rotateY(0deg)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            opacity: 1
+        },
+        {
+            top: (startY + distance * 0.5) + 'px',
+            transform: 'translate(-50%, 0) rotateY(360deg)',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            opacity: 1
+        },
+        {
+            top: (startY + distance * 0.8) + 'px',
+            transform: 'translate(-50%, 0) rotateY(540deg)',
+            width: '45px',
+            height: '12px',
+            borderRadius: '6px',
+            opacity: 0.8
+        },
+        {
+            top: endY + 'px',
+            transform: 'translate(-50%, 0) rotateY(720deg)',
+            width: '45px',
+            height: '6px',
+            borderRadius: '3px',
+            opacity: 0
+        }
+    ];
+    
+    coinAnimation.classList.remove('hidden');
+    
+    // Use Web Animations API for dynamic keyframes
+    const animation = coinAnimation.animate(keyframes, {
+        duration: 1000,
+        easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        fill: 'forwards'
+    });
+    
+    animation.onfinish = () => {
         coinAnimation.classList.add('hidden');
-    }, 800);
+    };
 }
 
 /**

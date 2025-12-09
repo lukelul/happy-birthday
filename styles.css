@@ -366,14 +366,8 @@ body {
     pointer-events: none;
 }
 
-.coin-animation.dropping {
-    animation: coinDrop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-}
-
-@keyframes coinDrop {
-    0% { top: 20%; left: 50%; transform: translate(-50%, 0) scale(1) rotateY(0deg); opacity: 1; }
-    100% { top: 50%; left: 50%; transform: translate(-50%, 0) scale(0.8) rotateY(720deg); opacity: 0; }
-}
+/* Coin animation is now handled by JavaScript Web Animations API */
+/* CSS animation removed to allow dynamic positioning */
 
 .coin-animation.hidden {
     display: none;
