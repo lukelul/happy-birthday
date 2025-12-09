@@ -40,6 +40,42 @@ const memories = [
         color: "#93C5FD", // Soft sky blue
         photo: "images/memory6.jpg", // Replace with your photo URL or path
         text: "The surprise you planned for me… Your thoughtfulness and the way you care about making me happy means everything to me."
+    },
+    {
+        id: 7,
+        color: "#86EFAC", // Soft green
+        photo: "images/memory7.jpg",
+        text: "The day we tried that new restaurant… Your excitement about trying new foods together made every meal an adventure."
+    },
+    {
+        id: 8,
+        color: "#FBBF24", // Soft amber
+        photo: "images/memory8.jpg",
+        text: "Our first road trip… Singing along to our favorite songs, getting lost, and making memories that will last forever."
+    },
+    {
+        id: 9,
+        color: "#F0ABFC", // Soft fuchsia
+        photo: "images/memory9.jpg",
+        text: "That time we stayed up all night talking… When the sun rose, I realized I never wanted those conversations to end."
+    },
+    {
+        id: 10,
+        color: "#60A5FA", // Soft indigo
+        photo: "images/memory10.jpg",
+        text: "The first time you made me breakfast… It wasn't perfect, but it was made with love, and that made it perfect to me."
+    },
+    {
+        id: 11,
+        color: "#F87171", // Soft rose
+        photo: "images/memory11.jpg",
+        text: "Dancing in the living room to our favorite song… Just the two of us, lost in the moment and each other."
+    },
+    {
+        id: 12,
+        color: "#34D399", // Soft emerald
+        photo: "images/memory12.jpg",
+        text: "The way you look at me when you think I'm not watching… Those moments remind me how lucky I am to have you."
     }
 ];
 
@@ -93,16 +129,15 @@ function initializePhysics() {
     // Increase gravity effect - make it stronger
     engine.timing.timeScale = 1.5; // Speed up physics slightly
     
-    // Get jar container dimensions
-    const jarRect = jar.getBoundingClientRect();
+    // Get jar container dimensions dynamically
     const containerRect = marblesContainer.getBoundingClientRect();
     
-    // Jar dimensions (relative to container)
-    const jarWidth = 240; // Width of marbles container
-    const jarHeight = 320; // Height of marbles container
+    // Jar dimensions (relative to container) - use actual container size
+    const jarWidth = containerRect.width || 280; // Width of marbles container (matches jar-glass)
+    const jarHeight = containerRect.height || 360; // Height of marbles container (matches jar-glass)
     const jarCenterX = jarWidth / 2;
     const jarBottom = jarHeight;
-    const jarRadius = 120; // Radius of curved bottom
+    const jarRadius = jarWidth / 2; // Radius of curved bottom (half the width)
     
     // Create jar boundaries
     // Left wall
@@ -164,8 +199,10 @@ function initializeMarbles() {
         initializePhysics();
     }
     
-    const jarWidth = 240;
-    const jarHeight = 320;
+    // Get actual container dimensions
+    const containerRect = marblesContainer.getBoundingClientRect();
+    const jarWidth = containerRect.width || 280;
+    const jarHeight = containerRect.height || 360;
     const jarCenterX = jarWidth / 2;
     
     memories.forEach((memory, index) => {
@@ -179,7 +216,9 @@ function initializeMarbles() {
         
         // Create physics body
         const marbleSize = 20; // Radius in pixels
-        const startX = jarCenterX + (Math.random() - 0.5) * 100; // Random x near center
+        // Spawn across full jar width (with margin for marble size)
+        const spawnWidth = jarWidth - (marbleSize * 2);
+        const startX = marbleSize + Math.random() * spawnWidth; // Random x across full width
         const startY = 50 + Math.random() * 100; // Start near top
         
         const marbleBody = Bodies.circle(startX, startY, marbleSize, {
@@ -219,7 +258,6 @@ function startPhysicsUpdate() {
     if (physicsUpdateRunning) return; // Prevent multiple loops
     physicsUpdateRunning = true;
     
-    const jarHeight = 320; // Height of marbles container
     let lastTime = performance.now();
     
     function update(currentTime) {
@@ -227,6 +265,10 @@ function startPhysicsUpdate() {
             requestAnimationFrame(update);
             return;
         }
+        
+        // Get current container dimensions (in case of resize)
+        const containerRect = marblesContainer.getBoundingClientRect();
+        const jarHeight = containerRect.height || 360;
         
         // Calculate delta time
         const delta = currentTime - lastTime;

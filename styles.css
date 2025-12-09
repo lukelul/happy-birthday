@@ -246,12 +246,27 @@ body {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 240px;
-    height: 320px;
+    width: 280px; /* Match jar-glass width */
+    height: 360px; /* Match jar-glass height */
     overflow: hidden;
     pointer-events: none;
     transform-style: preserve-3d;
-    clip-path: ellipse(120px 160px at 50% 100%);
+    /* Clip to match jar shape: wider at top, curved bottom */
+    clip-path: polygon(
+        0% 0%,
+        100% 0%,
+        100% 85%,
+        95% 90%,
+        90% 93%,
+        80% 96%,
+        70% 98%,
+        50% 100%,
+        30% 98%,
+        20% 96%,
+        10% 93%,
+        5% 90%,
+        0% 85%
+    );
 }
 
 .marble {
@@ -537,8 +552,8 @@ body {
     }
     
     .marbles-container {
-        width: 190px;
-        height: 250px;
+        width: 220px; /* Match jar-glass width at this breakpoint */
+        height: 290px; /* Match jar-glass height at this breakpoint */
     }
     
     .marble {
@@ -582,8 +597,8 @@ body {
     }
     
     .marbles-container {
-        width: 160px;
-        height: 210px;
+        width: 180px; /* Match jar-glass width at this breakpoint */
+        height: 240px; /* Match jar-glass height at this breakpoint */
     }
     
     .marble {
