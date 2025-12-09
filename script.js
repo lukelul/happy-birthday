@@ -23,7 +23,7 @@ function tryLoadImage(img, basePath) {
             // All extensions failed, show placeholder
             img.style.display = 'none';
             const placeholder = img.nextElementSibling;
-            if (placeholder && (placeholder.classList.contains('image-placeholder') || placeholder.classList.contains('memory-card-placeholder') || placeholder.classList.contains('memory-detail-placeholder'))) {
+            if (placeholder && (placeholder.classList.contains('image-placeholder') || placeholder.classList.contains('memory-card-placeholder') || placeholder.classList.contains('memory-detail-placeholder') || placeholder.classList.contains('memory-photo-placeholder'))) {
                 placeholder.style.display = 'flex';
             }
             return;
@@ -42,7 +42,7 @@ function tryLoadImage(img, basePath) {
             isLoaded = true;
             img.style.display = 'block';
             const placeholder = img.nextElementSibling;
-            if (placeholder && (placeholder.classList.contains('image-placeholder') || placeholder.classList.contains('memory-card-placeholder') || placeholder.classList.contains('memory-detail-placeholder'))) {
+            if (placeholder && (placeholder.classList.contains('image-placeholder') || placeholder.classList.contains('memory-card-placeholder') || placeholder.classList.contains('memory-detail-placeholder') || placeholder.classList.contains('memory-photo-placeholder'))) {
                 placeholder.style.display = 'none';
             }
         }
@@ -140,7 +140,7 @@ const viewAllBtn = document.getElementById('view-all-btn');
 const coinAnimation = document.getElementById('coin-animation');
 const revealedMarble = document.getElementById('revealed-marble');
 const memoryContent = document.getElementById('memory-content');
-const memoryPhoto = document.getElementById('memory-photo');
+const memoryPhotosWrapper = document.getElementById('memory-photos-wrapper');
 const memoryText = document.getElementById('memory-text');
 const backBtn = document.getElementById('back-btn');
 const galleryBackBtn = document.getElementById('gallery-back-btn');
@@ -568,14 +568,46 @@ function revealMemory(memory) {
     // Show revealed marble animation
     revealedMarble.classList.remove('hidden');
     
-        // Set memory content data (but keep it hidden)
-        // Use first photo from photos array
-        const firstPhoto = memory.photos && memory.photos.length > 0 ? memory.photos[0] : '';
-        if (firstPhoto) {
-            tryLoadImage(memoryPhoto, firstPhoto);
-        }
-        memoryPhoto.alt = `Memory ${memory.id}`;
-        memoryText.textContent = memory.text;
+    // Set memory content data (but keep it hidden)
+    // Clear existing photos
+    if (memoryPhotosWrapper) {
+        memoryPhotosWrapper.innerHTML = '';
+    }
+    
+    // Load all photos
+    const photos = memory.photos || [];
+    if (photos.length > 0) {
+        photos.forEach((photoPath, index) => {
+            const img = document.createElement('img');
+            img.className = 'memory-photo-item';
+            img.alt = `Memory ${memory.id} - Photo ${index + 1}`;
+            
+            const placeholder = document.createElement('div');
+            placeholder.className = 'memory-photo-placeholder';
+            placeholder.style.display = 'none';
+            placeholder.innerHTML = '<span>💕</span>';
+            
+            memoryPhotosWrapper.appendChild(img);
+            memoryPhotosWrapper.appendChild(placeholder);
+            
+            // Try loading image with fallback extensions
+            if (photoPath) {
+                tryLoadImage(img, photoPath);
+            } else {
+                img.style.display = 'none';
+                placeholder.style.display = 'flex';
+            }
+        });
+    } else {
+        // No photos, show placeholder
+        const placeholder = document.createElement('div');
+        placeholder.className = 'memory-photo-placeholder';
+        placeholder.style.display = 'flex';
+        placeholder.innerHTML = '<span>💕</span>';
+        memoryPhotosWrapper.appendChild(placeholder);
+    }
+    
+    memoryText.textContent = memory.text;
     
     // Ensure memory content is hidden initially
     memoryContent.classList.add('hidden');
@@ -900,31 +932,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 /**
  * Handle missing image files gracefully
+ * Note: Image loading is now handled by tryLoadImage function for all images
  */
-memoryPhoto.addEventListener('error', function() {
-    // Create a placeholder if image fails to load
-    this.style.display = 'none';
-    const placeholder = document.createElement('div');
-    placeholder.style.cssText = `
-        width: 100%;
-        max-width: 500px;
-        height: 300px;
-        background: linear-gradient(135deg, #ffb3d9 0%, #e6ccff 100%);
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 24px;
-        font-family: 'Poppins', sans-serif;
-    `;
-    placeholder.textContent = '💕 Memory Photo 💕';
-    
-    if (!this.parentElement.querySelector('.image-placeholder')) {
-        placeholder.className = 'image-placeholder';
-        this.parentElement.appendChild(placeholder);
-    }
-});
 
 // ============================================
 // ADDITIONAL ENHANCEMENTS
