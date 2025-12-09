@@ -503,7 +503,7 @@ function revealMemory(memory) {
     revealedMarble.classList.remove('hidden');
     
     // After marble expands, show memory content
-        setTimeout(() => {
+            setTimeout(() => {
         revealedMarble.classList.add('hidden');
         
         // Set memory content
@@ -562,10 +562,38 @@ if (backBtn) {
             jarScene.classList.add('active');
         }
         
-        // Reinitialize marbles for next use (all marbles will be recreated)
+        // Restore the popped marble instead of reinitializing all marbles
+        // Remove 'popping' class from any marbles that were popped and reset their position
         setTimeout(() => {
-            initializeMarbles();
-        }, 500);
+            marbleElements.forEach((marble, index) => {
+                if (marble.classList.contains('popping')) {
+                    marble.classList.remove('popping');
+                    // Reset the marble's position in physics (let it fall back into jar)
+                    if (marbleBodies[index]) {
+                        const containerRect = marblesContainer.getBoundingClientRect();
+                        const jarWidth = containerRect.width || 280;
+                        const jarHeight = containerRect.height || 360;
+                        const jarCenterX = jarWidth / 2;
+                        const marbleSize = 20;
+                        
+                        // Reset position to top of jar and let it fall
+                        Body.setPosition(marbleBodies[index], {
+                            x: jarCenterX + (Math.random() - 0.5) * 100,
+                            y: 50 + Math.random() * 50
+                        });
+                        Body.setVelocity(marbleBodies[index], {
+                            x: (Math.random() - 0.5) * 0.5,
+                            y: 2 + Math.random() * 2
+                        });
+                    }
+                }
+            });
+        }, 100);
+        
+        // Ensure physics update is running
+        if (!physicsUpdateRunning && isPhysicsInitialized) {
+            startPhysicsUpdate();
+        }
     });
 } else {
     console.error('Back button not found!');
