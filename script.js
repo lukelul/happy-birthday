@@ -55,26 +55,26 @@ const memories = [
     {
         id: 1,
         color: "#F9A8D4", // Soft pink
-        photos: [getPhotoPath(1), getPhotoPath(2), getPhotoPath(3), getPhotoPath(4), getPhotoPath(5)], // Photos 1-5
-        text: "Our first date at the coffee shop… The way you smiled when you saw me made my heart skip a beat. I knew right then that this was something special."
+        photos: [getPhotoPath(1)], // Photo 1
+        text: "I remember this was the first time we called all the way back in January and I was super happy so I screenshotted and saved it."
     },
     {
         id: 2,
         color: "#A5F3FC", // Soft blue
-        photos: [getPhotoPath(6), getPhotoPath(7), getPhotoPath(8), getPhotoPath(9), getPhotoPath(10)], // Photos 6-10
-        text: "The time we explored downtown together… Walking hand in hand, discovering new places, and creating our own little adventures. Every moment felt like magic."
+        photos: [getPhotoPath(2)], // Photo 2
+        text: "This was one of my most memorable chat moments with you lol, I think this was the exact moment I started gaining feelings."
     },
     {
         id: 3,
         color: "#C4B5FD", // Soft purple
-        photos: [getPhotoPath(11), getPhotoPath(12), getPhotoPath(13), getPhotoPath(14), getPhotoPath(15)], // Photos 11-15
-        text: "That rainy day we spent indoors, watching movies and talking for hours… Time seemed to stand still when I was with you."
+        photos: [getPhotoPath(3)], // Photo 3
+        text: "This was when I went to Mecha in Calgary, it was really fun. A lot of my friends expected you to also come but you didn't which was sad, but that only made me more excited for Worlds. I still remember the first night we were on call and when we arrived at the Airbnb we couldn't get in because the locks froze, and you were super sick but you still stayed up for me. It's funny because in the past you would always stay up later than I would and I would always fall asleep first."
     },
     {
         id: 4,
         color: "#FCD34D", // Soft yellow
-        photos: [getPhotoPath(16), getPhotoPath(17), getPhotoPath(18), getPhotoPath(19), getPhotoPath(20)], // Photos 16-20
-        text: "The sunset we watched together… The sky painted in hues of pink and orange, but nothing was more beautiful than seeing it reflected in your eyes."
+        photos: [getPhotoPath(4), getPhotoPath(5), getPhotoPath(6)], // Photos 4-6
+        text: "This was one of the times we played Minecraft. I remember I found this map that was fun to explore and we ran around and found the highest building to climb on and I placed a sign up there so you wouldn't know, and you thought it was already there lol."
     },
     {
         id: 5,
