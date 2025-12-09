@@ -93,8 +93,14 @@ body {
     0% {
         background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 30%, #e6ccff 60%, #cce6ff 100%);
     }
+    10% {
+        background: linear-gradient(135deg, #ffe6f0 4%, #ffb3d9 31%, #e6ccff 61%, #cce6ff 96%);
+    }
     20% {
         background: linear-gradient(135deg, #ffe6f0 8%, #ffb3d9 32%, #e6ccff 62%, #cce6ff 92%);
+    }
+    30% {
+        background: linear-gradient(135deg, #ffe6f0 10%, #ffb3d9 33%, #e6ccff 63%, #cce6ff 90%);
     }
     40% {
         background: linear-gradient(135deg, #ffe6f0 12%, #ffb3d9 34%, #e6ccff 64%, #cce6ff 88%);
@@ -105,8 +111,14 @@ body {
     60% {
         background: linear-gradient(135deg, #e6ccff 8%, #cce6ff 32%, #ffe6f0 62%, #ffb3d9 92%);
     }
+    70% {
+        background: linear-gradient(135deg, #e6ccff 10%, #cce6ff 33%, #ffe6f0 63%, #ffb3d9 90%);
+    }
     80% {
         background: linear-gradient(135deg, #e6ccff 12%, #cce6ff 34%, #ffe6f0 64%, #ffb3d9 88%);
+    }
+    90% {
+        background: linear-gradient(135deg, #cce6ff 4%, #ffe6f0 31%, #ffb3d9 61%, #e6ccff 96%);
     }
     100% {
         background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 30%, #e6ccff 60%, #cce6ff 100%);
