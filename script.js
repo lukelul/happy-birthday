@@ -566,19 +566,22 @@ if (backBtn) {
             jarScene.classList.add('active');
         }
         
-        // Restore the popped marble instead of reinitializing all marbles
+        // Restore the popped marble and ensure all marbles are visible
         // Remove 'popping' class from any marbles that were popped and reset their position
         setTimeout(() => {
+            const containerRect = marblesContainer.getBoundingClientRect();
+            const jarHeight = containerRect.height || 360;
+            
             marbleElements.forEach((marble, index) => {
+                // Make sure marble is visible
+                marble.style.display = '';
+                
                 if (marble.classList.contains('popping')) {
                     marble.classList.remove('popping');
                     // Reset the marble's position in physics (let it fall back into jar)
                     if (marbleBodies[index]) {
-                        const containerRect = marblesContainer.getBoundingClientRect();
                         const jarWidth = containerRect.width || 280;
-                        const jarHeight = containerRect.height || 360;
                         const jarCenterX = jarWidth / 2;
-                        const marbleSize = 20;
                         
                         // Reset position to top of jar and let it fall
                         Body.setPosition(marbleBodies[index], {
@@ -590,13 +593,41 @@ if (backBtn) {
                             y: 2 + Math.random() * 2
                         });
                     }
+                } else {
+                    // For marbles that weren't popped, restore their visual position from physics
+                    if (marbleBodies[index]) {
+                        const body = marbleBodies[index];
+                        const x = body.position.x;
+                        const y = body.position.y;
+                        
+                        // Update visual position immediately
+                        marble.style.left = (x - 20) + 'px';
+                        marble.style.bottom = (jarHeight - y - 20) + 'px';
+                        marble.style.transform = `rotate(${body.angle}rad)`;
+                    }
                 }
             });
-        }, 100);
+        }, 50);
         
         // Ensure physics update is running
         if (!physicsUpdateRunning && isPhysicsInitialized) {
             startPhysicsUpdate();
+        } else if (physicsUpdateRunning) {
+            // Force an immediate update to sync positions
+            const containerRect = marblesContainer.getBoundingClientRect();
+            const jarHeight = containerRect.height || 360;
+            
+            marbleBodies.forEach((body, index) => {
+                if (marbleElements[index] && !marbleElements[index].classList.contains('popping')) {
+                    const marble = marbleElements[index];
+                    const x = body.position.x;
+                    const y = body.position.y;
+                    
+                    marble.style.left = (x - 20) + 'px';
+                    marble.style.bottom = (jarHeight - y - 20) + 'px';
+                    marble.style.transform = `rotate(${body.angle}rad)`;
+                }
+            });
         }
     });
 } else {
@@ -674,7 +705,7 @@ window.addEventListener('DOMContentLoaded', () => {
     
     initializePhysics();
     // Wait a bit for the scene to be ready
-    setTimeout(() => {
+            setTimeout(() => {
         initializeMarbles();
     }, 200);
 });
