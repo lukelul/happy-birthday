@@ -15,6 +15,12 @@
     <div id="jar-scene" class="scene active">
         <div class="background-gradient"></div>
         
+        <!-- View All Memories Button -->
+        <button id="view-all-btn" class="view-all-btn">
+            <span class="btn-icon">📖</span>
+            <span class="btn-text">View All Memories</span>
+        </button>
+        
         <!-- Floating sparkles -->
         <div class="sparkles-container">
             <div class="sparkle"></div>
@@ -93,6 +99,32 @@
             <button id="back-btn" class="back-btn hidden">
                 <span>← Back to the Jar</span>
             </button>
+        </div>
+    </div>
+    
+    <!-- All Memories Gallery Scene -->
+    <div id="gallery-scene" class="scene">
+        <div class="background-gradient"></div>
+        
+        <!-- Floating hearts -->
+        <div class="hearts-container">
+            <div class="heart">💕</div>
+            <div class="heart">💖</div>
+            <div class="heart">💗</div>
+            <div class="heart">💝</div>
+        </div>
+        
+        <div class="gallery-container">
+            <div class="gallery-header">
+                <h2 class="gallery-title">All Memories 💕</h2>
+                <button id="gallery-back-btn" class="gallery-back-btn">
+                    <span>← Back to Jar</span>
+                </button>
+            </div>
+            
+            <div id="gallery-memories" class="gallery-memories">
+                <!-- Memories will be dynamically generated here -->
+            </div>
         </div>
     </div>
     

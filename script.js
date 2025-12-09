@@ -85,15 +85,19 @@ const memories = [
 
 const jarScene = document.getElementById('jar-scene');
 const memoryScene = document.getElementById('memory-scene');
+const galleryScene = document.getElementById('gallery-scene');
 const jar = document.getElementById('jar');
 const marblesContainer = document.getElementById('marbles-container');
 const insertCoinBtn = document.getElementById('insert-coin-btn');
+const viewAllBtn = document.getElementById('view-all-btn');
 const coinAnimation = document.getElementById('coin-animation');
 const revealedMarble = document.getElementById('revealed-marble');
 const memoryContent = document.getElementById('memory-content');
 const memoryPhoto = document.getElementById('memory-photo');
 const memoryText = document.getElementById('memory-text');
 const backBtn = document.getElementById('back-btn');
+const galleryBackBtn = document.getElementById('gallery-back-btn');
+const galleryMemories = document.getElementById('gallery-memories');
 
 // ============================================
 // PHYSICS ENGINE SETUP
@@ -597,6 +601,67 @@ if (backBtn) {
     });
 } else {
     console.error('Back button not found!');
+}
+
+// ============================================
+// VIEW ALL MEMORIES GALLERY
+// ============================================
+
+/**
+ * Show gallery with all memories
+ */
+function showGallery() {
+    // Clear existing gallery content
+    galleryMemories.innerHTML = '';
+    
+    // Create memory cards for each memory
+    memories.forEach((memory, index) => {
+        const memoryCard = document.createElement('div');
+        memoryCard.className = 'memory-card';
+        memoryCard.style.borderColor = memory.color;
+        
+        memoryCard.innerHTML = `
+            <div class="memory-card-marble" style="background-color: ${memory.color}; color: ${memory.color};"></div>
+            <div class="memory-card-content">
+                <div class="memory-card-photo-frame">
+                    <img src="${memory.photo}" alt="Memory ${memory.id}" class="memory-card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="memory-card-placeholder" style="display: none;">
+                        <span>💕</span>
+                    </div>
+                </div>
+                <div class="memory-card-text">
+                    <p>${memory.text}</p>
+                </div>
+            </div>
+        `;
+        
+        galleryMemories.appendChild(memoryCard);
+    });
+    
+    // Switch to gallery scene
+    jarScene.classList.remove('active');
+    galleryScene.classList.add('active');
+}
+
+/**
+ * Hide gallery and return to jar
+ */
+function hideGallery() {
+    galleryScene.classList.remove('active');
+    jarScene.classList.add('active');
+}
+
+// Event listeners for gallery
+if (viewAllBtn) {
+    viewAllBtn.addEventListener('click', () => {
+        showGallery();
+    });
+}
+
+if (galleryBackBtn) {
+    galleryBackBtn.addEventListener('click', () => {
+        hideGallery();
+    });
 }
 
 // Initialize physics and marbles on page load
