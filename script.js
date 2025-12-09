@@ -651,6 +651,8 @@ function showGallery() {
         const memoryCard = document.createElement('div');
         memoryCard.className = 'memory-card';
         memoryCard.style.borderColor = memory.color;
+        memoryCard.setAttribute('data-memory-id', memory.id);
+        memoryCard.style.cursor = 'pointer';
         
         memoryCard.innerHTML = `
             <div class="memory-card-marble" style="background-color: ${memory.color}; color: ${memory.color};"></div>
@@ -667,6 +669,11 @@ function showGallery() {
             </div>
         `;
         
+        // Add click event to show detailed view
+        memoryCard.addEventListener('click', () => {
+            showMemoryDetail(memory);
+        });
+        
         galleryMemories.appendChild(memoryCard);
     });
     
@@ -681,6 +688,79 @@ function showGallery() {
 function hideGallery() {
     galleryScene.classList.remove('active');
     jarScene.classList.add('active');
+    // Close any open detail view
+    const detailView = document.getElementById('memory-detail-view');
+    if (detailView) {
+        detailView.classList.remove('active');
+    }
+}
+
+/**
+ * Show detailed view of a memory
+ */
+function showMemoryDetail(memory) {
+    let detailView = document.getElementById('memory-detail-view');
+    
+    // Create detail view if it doesn't exist
+    if (!detailView) {
+        detailView = document.createElement('div');
+        detailView.id = 'memory-detail-view';
+        detailView.className = 'memory-detail-view';
+        detailView.innerHTML = `
+            <div class="memory-detail-overlay"></div>
+            <div class="memory-detail-content">
+                <button class="memory-detail-close">×</button>
+                <div class="memory-detail-marble"></div>
+                <div class="memory-detail-photo-frame">
+                    <img class="memory-detail-photo" src="" alt="Memory">
+                    <div class="memory-detail-placeholder" style="display: none;">
+                        <span>💕</span>
+                    </div>
+                </div>
+                <div class="memory-detail-text">
+                    <p></p>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(detailView);
+        
+        // Close button event
+        const closeBtn = detailView.querySelector('.memory-detail-close');
+        const overlay = detailView.querySelector('.memory-detail-overlay');
+        
+        closeBtn.addEventListener('click', () => {
+            detailView.classList.remove('active');
+        });
+        
+        overlay.addEventListener('click', () => {
+            detailView.classList.remove('active');
+        });
+    }
+    
+    // Update content
+    const marble = detailView.querySelector('.memory-detail-marble');
+    const photo = detailView.querySelector('.memory-detail-photo');
+    const placeholder = detailView.querySelector('.memory-detail-placeholder');
+    const text = detailView.querySelector('.memory-detail-text p');
+    
+    marble.style.backgroundColor = memory.color;
+    marble.style.color = memory.color;
+    photo.src = memory.photo;
+    photo.alt = `Memory ${memory.id}`;
+    text.textContent = memory.text;
+    
+    // Handle image error
+    photo.onerror = () => {
+        photo.style.display = 'none';
+        placeholder.style.display = 'flex';
+    };
+    photo.onload = () => {
+        photo.style.display = 'block';
+        placeholder.style.display = 'none';
+    };
+    
+    // Show detail view
+    detailView.classList.add('active');
 }
 
 // Event listeners for gallery
