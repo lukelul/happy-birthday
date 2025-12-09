@@ -1052,13 +1052,13 @@ body {
     background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 105, 180, 0.2) 100%);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    max-height: 150px;
+    max-height: 120px;
 }
 
 .memory-detail-photo {
     width: 100%;
     height: 100%;
-    max-height: 150px;
+    max-height: 120px;
     display: block;
     object-fit: cover;
     object-position: center;
@@ -1071,18 +1071,21 @@ body {
     z-index: 1000;
     overflow: visible;
     max-height: none;
+    position: relative;
 }
 
 .memory-detail-photo-wrapper:hover .memory-detail-photo {
-    width: auto;
+    width: 100%;
     height: auto;
-    max-width: 90vw;
-    max-height: 90vh;
+    max-width: 100%;
+    max-height: 80vh;
     object-fit: contain;
     z-index: 1001;
     position: relative;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     border-radius: 20px;
+    margin: 0 auto;
+    display: block;
 }
 
 .memory-detail-placeholder {
