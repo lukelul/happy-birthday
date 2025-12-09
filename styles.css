@@ -85,22 +85,28 @@ body {
     height: 100%;
     background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 30%, #e6ccff 60%, #cce6ff 100%);
     z-index: 0;
-    animation: gradientShift 20s ease-in-out infinite;
-    transition: background 0.5s ease-in-out;
+    animation: gradientShift 30s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    transition: background 2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes gradientShift {
     0% {
         background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 30%, #e6ccff 60%, #cce6ff 100%);
     }
-    25% {
-        background: linear-gradient(135deg, #ffe6f0 15%, #ffb3d9 35%, #e6ccff 65%, #cce6ff 85%);
+    20% {
+        background: linear-gradient(135deg, #ffe6f0 8%, #ffb3d9 32%, #e6ccff 62%, #cce6ff 92%);
+    }
+    40% {
+        background: linear-gradient(135deg, #ffe6f0 12%, #ffb3d9 34%, #e6ccff 64%, #cce6ff 88%);
     }
     50% {
         background: linear-gradient(135deg, #ffb3d9 0%, #e6ccff 30%, #cce6ff 60%, #ffe6f0 100%);
     }
-    75% {
-        background: linear-gradient(135deg, #e6ccff 15%, #cce6ff 35%, #ffe6f0 65%, #ffb3d9 85%);
+    60% {
+        background: linear-gradient(135deg, #e6ccff 8%, #cce6ff 32%, #ffe6f0 62%, #ffb3d9 92%);
+    }
+    80% {
+        background: linear-gradient(135deg, #e6ccff 12%, #cce6ff 34%, #ffe6f0 64%, #ffb3d9 88%);
     }
     100% {
         background: linear-gradient(135deg, #ffe6f0 0%, #ffb3d9 30%, #e6ccff 60%, #cce6ff 100%);
