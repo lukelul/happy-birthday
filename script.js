@@ -330,8 +330,9 @@ function startPhysicsUpdate() {
         const containerRect = marblesContainer.getBoundingClientRect();
         const jarHeight = containerRect.height || 360;
         
-        // Calculate delta time
-        const delta = currentTime - lastTime;
+        // Calculate delta time - cap it to prevent large jumps when tab becomes active
+        let delta = currentTime - lastTime;
+        if (delta > 1000) delta = 16; // Cap at ~60fps if tab was inactive
         lastTime = currentTime;
         
         // Always update physics engine (even when scene is inactive)
@@ -938,6 +939,45 @@ window.addEventListener('DOMContentLoaded', () => {
 // ============================================
 // ADDITIONAL ENHANCEMENTS
 // ============================================
+
+// ============================================
+// TAB VISIBILITY HANDLING
+// ============================================
+
+/**
+ * Handle tab visibility changes to ensure marbles remain visible
+ */
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && jarScene.classList.contains('active')) {
+        // Tab became visible and jar scene is active
+        // Ensure marbles are visible and physics is running
+        setTimeout(() => {
+            const containerRect = marblesContainer.getBoundingClientRect();
+            const jarHeight = containerRect.height || 360;
+            
+            marbleElements.forEach((marble, index) => {
+                if (marble && !marble.classList.contains('popping') && marbleBodies[index]) {
+                    // Make sure marble is visible
+                    marble.style.display = '';
+                    
+                    // Update visual position from physics
+                    const body = marbleBodies[index];
+                    const x = body.position.x;
+                    const y = body.position.y;
+                    
+                    marble.style.left = (x - 20) + 'px';
+                    marble.style.bottom = (jarHeight - y - 20) + 'px';
+                    marble.style.transform = `rotate(${body.angle}rad)`;
+                }
+            });
+            
+            // Ensure physics update is running
+            if (!physicsUpdateRunning && isPhysicsInitialized) {
+                startPhysicsUpdate();
+            }
+        }, 100);
+    }
+});
 
 // ============================================
 // MOUSE TRACKING & JAR TILT
