@@ -4,77 +4,122 @@
 // Easy to edit: Add new memories here!
 // Each memory needs: id, color, photo (URL or path), and text
 
+// Helper function to get photo path (tries .jpg first, then .heic)
+function getPhotoPath(num) {
+    return `images/${num}.jpg`; // Will try .heic as fallback in image loading
+}
+
+// Helper function to try loading image with different extensions
+function tryLoadImage(img, basePath) {
+    const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.heic', '.HEIC'];
+    let currentIndex = 0;
+    let isLoaded = false;
+    
+    function tryNext() {
+        if (isLoaded) return; // Already loaded successfully
+        
+        if (currentIndex >= extensions.length) {
+            // All extensions failed, show placeholder
+            img.style.display = 'none';
+            const placeholder = img.nextElementSibling;
+            if (placeholder && (placeholder.classList.contains('image-placeholder') || placeholder.classList.contains('memory-card-placeholder') || placeholder.classList.contains('memory-detail-placeholder'))) {
+                placeholder.style.display = 'flex';
+            }
+            return;
+        }
+        
+        const base = basePath.replace(/\.(jpg|heic|JPG|HEIC|jpeg|JPEG)$/i, '');
+        const path = base + extensions[currentIndex];
+        img.src = path;
+        currentIndex++;
+    }
+    
+    img.onerror = tryNext;
+    img.onload = () => {
+        if (!isLoaded) {
+            isLoaded = true;
+            img.style.display = 'block';
+            const placeholder = img.nextElementSibling;
+            if (placeholder && (placeholder.classList.contains('image-placeholder') || placeholder.classList.contains('memory-card-placeholder') || placeholder.classList.contains('memory-detail-placeholder'))) {
+                placeholder.style.display = 'none';
+            }
+        }
+    };
+    
+    tryNext();
+}
+
 const memories = [
     {
         id: 1,
         color: "#F9A8D4", // Soft pink
-        photo: "images/memory1.jpg", // Replace with your photo URL or path
+        photos: [getPhotoPath(1), getPhotoPath(2), getPhotoPath(3), getPhotoPath(4), getPhotoPath(5)], // Photos 1-5
         text: "Our first date at the coffee shop… The way you smiled when you saw me made my heart skip a beat. I knew right then that this was something special."
     },
     {
         id: 2,
         color: "#A5F3FC", // Soft blue
-        photo: "images/memory2.jpg", // Replace with your photo URL or path
+        photos: [getPhotoPath(6), getPhotoPath(7), getPhotoPath(8), getPhotoPath(9), getPhotoPath(10)], // Photos 6-10
         text: "The time we explored downtown together… Walking hand in hand, discovering new places, and creating our own little adventures. Every moment felt like magic."
     },
     {
         id: 3,
         color: "#C4B5FD", // Soft purple
-        photo: "images/memory3.jpg", // Replace with your photo URL or path
+        photos: [getPhotoPath(11), getPhotoPath(12), getPhotoPath(13), getPhotoPath(14), getPhotoPath(15)], // Photos 11-15
         text: "That rainy day we spent indoors, watching movies and talking for hours… Time seemed to stand still when I was with you."
     },
     {
         id: 4,
         color: "#FCD34D", // Soft yellow
-        photo: "images/memory4.jpg", // Replace with your photo URL or path
+        photos: [getPhotoPath(16), getPhotoPath(17), getPhotoPath(18), getPhotoPath(19), getPhotoPath(20)], // Photos 16-20
         text: "The sunset we watched together… The sky painted in hues of pink and orange, but nothing was more beautiful than seeing it reflected in your eyes."
     },
     {
         id: 5,
         color: "#FCA5A5", // Soft coral
-        photo: "images/memory5.jpg", // Replace with your photo URL or path
+        photos: [getPhotoPath(21), getPhotoPath(22), getPhotoPath(23), getPhotoPath(24), getPhotoPath(25)], // Photos 21-25
         text: "Our first laugh together… That moment when we both couldn't stop giggling, and I realized how much joy you bring into my life."
     },
     {
         id: 6,
         color: "#93C5FD", // Soft sky blue
-        photo: "images/memory6.jpg", // Replace with your photo URL or path
+        photos: [getPhotoPath(26), getPhotoPath(27), getPhotoPath(28), getPhotoPath(29), getPhotoPath(30)], // Photos 26-30
         text: "The surprise you planned for me… Your thoughtfulness and the way you care about making me happy means everything to me."
     },
     {
         id: 7,
         color: "#86EFAC", // Soft green
-        photo: "images/memory7.jpg",
+        photos: [getPhotoPath(31), getPhotoPath(32), getPhotoPath(33), getPhotoPath(34), getPhotoPath(35)], // Photos 31-35
         text: "The day we tried that new restaurant… Your excitement about trying new foods together made every meal an adventure."
     },
     {
         id: 8,
         color: "#FBBF24", // Soft amber
-        photo: "images/memory8.jpg",
+        photos: [getPhotoPath(36), getPhotoPath(37), getPhotoPath(38), getPhotoPath(39), getPhotoPath(40)], // Photos 36-40
         text: "Our first road trip… Singing along to our favorite songs, getting lost, and making memories that will last forever."
     },
     {
         id: 9,
         color: "#F0ABFC", // Soft fuchsia
-        photo: "images/memory9.jpg",
+        photos: [getPhotoPath(41), getPhotoPath(42), getPhotoPath(43), getPhotoPath(44), getPhotoPath(45)], // Photos 41-45
         text: "That time we stayed up all night talking… When the sun rose, I realized I never wanted those conversations to end."
     },
     {
         id: 10,
         color: "#60A5FA", // Soft indigo
-        photo: "images/memory10.jpg",
+        photos: [getPhotoPath(46), getPhotoPath(47), getPhotoPath(48), getPhotoPath(49)], // Photos 46-49
         text: "The first time you made me breakfast… It wasn't perfect, but it was made with love, and that made it perfect to me."
     },
     {
         id: 11,
         color: "#F87171", // Soft rose
-        photo: "images/memory11.jpg",
+        photos: [getPhotoPath(50), getPhotoPath(51), getPhotoPath(52), getPhotoPath(53)], // Photos 50-53
         text: "Dancing in the living room to our favorite song… Just the two of us, lost in the moment and each other."
     },
     {
         id: 12,
         color: "#34D399", // Soft emerald
-        photo: "images/memory12.jpg",
+        photos: [getPhotoPath(54), getPhotoPath(55), getPhotoPath(56), getPhotoPath(57), getPhotoPath(58)], // Photos 54-58
         text: "The way you look at me when you think I'm not watching… Those moments remind me how lucky I am to have you."
     }
 ];
@@ -521,10 +566,14 @@ function revealMemory(memory) {
     // Show revealed marble animation
     revealedMarble.classList.remove('hidden');
     
-    // Set memory content data (but keep it hidden)
-    memoryPhoto.src = memory.photo;
-    memoryPhoto.alt = `Memory ${memory.id}`;
-    memoryText.textContent = memory.text;
+        // Set memory content data (but keep it hidden)
+        // Use first photo from photos array
+        const firstPhoto = memory.photos && memory.photos.length > 0 ? memory.photos[0] : '';
+        if (firstPhoto) {
+            tryLoadImage(memoryPhoto, firstPhoto);
+        }
+        memoryPhoto.alt = `Memory ${memory.id}`;
+        memoryText.textContent = memory.text;
     
     // Ensure memory content is hidden initially
     memoryContent.classList.add('hidden');
@@ -659,20 +708,31 @@ function showGallery() {
         memoryCard.setAttribute('data-memory-id', memory.id);
         memoryCard.style.cursor = 'pointer';
         
+        // Get first photo from photos array
+        const firstPhoto = memory.photos && memory.photos.length > 0 ? memory.photos[0] : '';
+        const photoCount = memory.photos ? memory.photos.length : 0;
+        
         memoryCard.innerHTML = `
             <div class="memory-card-marble" style="background-color: ${memory.color}; color: ${memory.color};"></div>
             <div class="memory-card-content">
                 <div class="memory-card-photo-frame">
-                    <img src="${memory.photo}" alt="Memory ${memory.id}" class="memory-card-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <img src="${firstPhoto}" alt="Memory ${memory.id}" class="memory-card-photo" data-photo-base="${firstPhoto ? firstPhoto.replace(/\.(jpg|heic|JPG|HEIC|jpeg|JPEG)$/i, '') : ''}">
                     <div class="memory-card-placeholder" style="display: none;">
                         <span>💕</span>
                     </div>
+                    ${photoCount > 1 ? `<div class="photo-count-badge">${photoCount} photos</div>` : ''}
                 </div>
                 <div class="memory-card-text">
                     <p>${memory.text}</p>
                 </div>
             </div>
         `;
+        
+        // Try loading image with fallback extensions
+        const cardPhoto = memoryCard.querySelector('.memory-card-photo');
+        if (cardPhoto && firstPhoto) {
+            tryLoadImage(cardPhoto, firstPhoto);
+        }
         
         // Add click event to show detailed view
         memoryCard.addEventListener('click', () => {
@@ -747,22 +807,31 @@ function showMemoryDetail(memory) {
     const photo = detailView.querySelector('.memory-detail-photo');
     const placeholder = detailView.querySelector('.memory-detail-placeholder');
     const text = detailView.querySelector('.memory-detail-text p');
+    const photoContainer = detailView.querySelector('.memory-detail-photo-frame');
     
     marble.style.backgroundColor = memory.color;
     marble.style.color = memory.color;
-    photo.src = memory.photo;
-    photo.alt = `Memory ${memory.id}`;
     text.textContent = memory.text;
     
-    // Handle image error
-    photo.onerror = () => {
-        photo.style.display = 'none';
-        placeholder.style.display = 'flex';
-    };
-    photo.onload = () => {
-        photo.style.display = 'block';
-        placeholder.style.display = 'none';
-    };
+    // Clear existing photos
+    photoContainer.innerHTML = `
+        <img class="memory-detail-photo" src="" alt="Memory">
+        <div class="memory-detail-placeholder" style="display: none;">
+            <span>💕</span>
+        </div>
+    `;
+    
+    const newPhoto = photoContainer.querySelector('.memory-detail-photo');
+    const newPlaceholder = photoContainer.querySelector('.memory-detail-placeholder');
+    
+    // Load first photo with fallback extensions
+    const firstPhoto = memory.photos && memory.photos.length > 0 ? memory.photos[0] : '';
+    if (firstPhoto) {
+        tryLoadImage(newPhoto, firstPhoto);
+    } else {
+        newPhoto.style.display = 'none';
+        newPlaceholder.style.display = 'flex';
+    }
     
     // Show detail view
     detailView.classList.add('active');
