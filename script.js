@@ -11,7 +11,7 @@ function getPhotoPath(num) {
 
 // Helper function to try loading image with different extensions
 function tryLoadImage(img, basePath) {
-    const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.heic', '.HEIC'];
+    const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG', '.heic', '.HEIC'];
     let currentIndex = 0;
     let isLoaded = false;
     
@@ -28,7 +28,7 @@ function tryLoadImage(img, basePath) {
             return;
         }
         
-        const base = basePath.replace(/\.(jpg|heic|JPG|HEIC|jpeg|JPEG)$/i, '');
+        const base = basePath.replace(/\.(jpg|heic|JPG|HEIC|jpeg|JPEG|png|PNG)$/i, '');
         const path = base + extensions[currentIndex];
         img.src = path;
         currentIndex++;
@@ -716,7 +716,7 @@ function showGallery() {
             <div class="memory-card-marble" style="background-color: ${memory.color}; color: ${memory.color};"></div>
             <div class="memory-card-content">
                 <div class="memory-card-photo-frame">
-                    <img src="${firstPhoto}" alt="Memory ${memory.id}" class="memory-card-photo" data-photo-base="${firstPhoto ? firstPhoto.replace(/\.(jpg|heic|JPG|HEIC|jpeg|JPEG)$/i, '') : ''}">
+                    <img src="${firstPhoto}" alt="Memory ${memory.id}" class="memory-card-photo" data-photo-base="${firstPhoto ? firstPhoto.replace(/\.(jpg|heic|JPG|HEIC|jpeg|JPEG|png|PNG)$/i, '') : ''}">
                     <div class="memory-card-placeholder" style="display: none;">
                         <span>💕</span>
                     </div>
