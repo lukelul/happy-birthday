@@ -834,13 +834,12 @@ body {
     position: relative;
     width: 100%;
     border-radius: 15px;
-    overflow: visible;
+    overflow: hidden;
     background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 105, 180, 0.2) 100%);
     min-height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
 }
 
 .memory-card-photo {
@@ -848,21 +847,6 @@ body {
     height: auto;
     display: block;
     object-fit: cover;
-    transition: transform 0.3s ease;
-    border-radius: 15px;
-    position: relative;
-}
-
-.memory-card:hover .memory-card-photo-frame {
-    z-index: 1000;
-    overflow: visible;
-}
-
-.memory-card:hover .memory-card-photo {
-    transform: scale(2.5);
-    z-index: 1001;
-    position: relative;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     border-radius: 15px;
 }
 
@@ -1020,9 +1004,10 @@ body {
     position: relative;
     width: 100%;
     border-radius: 20px;
-    overflow: hidden;
+    overflow: visible;
     background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 105, 180, 0.2) 100%);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
 }
 
 .memory-detail-photo {
@@ -1030,6 +1015,22 @@ body {
     height: auto;
     display: block;
     object-fit: cover;
+    border-radius: 20px;
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.memory-detail-photo-wrapper:hover {
+    z-index: 1000;
+    overflow: visible;
+}
+
+.memory-detail-photo-wrapper:hover .memory-detail-photo {
+    transform: scale(2.5);
+    z-index: 1001;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
 }
 
 .memory-detail-placeholder {

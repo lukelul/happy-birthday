@@ -11,7 +11,8 @@ function getPhotoPath(num) {
 
 // Helper function to try loading image with different extensions
 function tryLoadImage(img, basePath) {
-    const extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG', '.heic', '.HEIC'];
+    // Try HEIC first since user has HEIC files, then other formats
+    const extensions = ['.HEIC', '.heic', '.JPG', '.jpg', '.JPEG', '.jpeg', '.PNG', '.png'];
     let currentIndex = 0;
     let isLoaded = false;
     
@@ -28,6 +29,7 @@ function tryLoadImage(img, basePath) {
             return;
         }
         
+        // Strip any existing extension and try with new extension
         const base = basePath.replace(/\.(jpg|heic|JPG|HEIC|jpeg|JPEG|png|PNG)$/i, '');
         const path = base + extensions[currentIndex];
         img.src = path;
