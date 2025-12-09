@@ -271,10 +271,13 @@ function startPhysicsUpdate() {
     let lastTime = performance.now();
     
     function update(currentTime) {
-        if (!isPhysicsInitialized || !jarScene.classList.contains('active')) {
-            requestAnimationFrame(update);
+        if (!isPhysicsInitialized) {
+            physicsUpdateRunning = false;
             return;
         }
+        
+        // Continue physics even when jar scene is inactive, but only update visuals when active
+        const isJarSceneActive = jarScene.classList.contains('active');
         
         // Get current container dimensions (in case of resize)
         const containerRect = marblesContainer.getBoundingClientRect();
@@ -284,23 +287,31 @@ function startPhysicsUpdate() {
         const delta = currentTime - lastTime;
         lastTime = currentTime;
         
-        // Update physics engine with proper timing
+        // Always update physics engine (even when scene is inactive)
         Engine.update(engine, delta);
         
-        // Sync visual marbles with physics bodies
-        marbleBodies.forEach((body, index) => {
-            if (marbleElements[index] && !marbleElements[index].classList.contains('popping')) {
-                const marble = marbleElements[index];
-                const x = body.position.x;
-                const y = body.position.y;
-                
-                // Convert physics coordinates to CSS (container is positioned relative)
-                // Physics Y=0 is at top, CSS bottom=0 is at bottom, so we flip
-                marble.style.left = (x - 20) + 'px'; // Subtract half marble size (40px / 2)
-                marble.style.bottom = (jarHeight - y - 20) + 'px'; // Flip Y axis and subtract half size
-                marble.style.transform = `rotate(${body.angle}rad)`;
-            }
-        });
+        // Only update visual positions when jar scene is active
+        if (isJarSceneActive) {
+            // Get current container dimensions (in case of resize)
+            const containerRect = marblesContainer.getBoundingClientRect();
+            const jarHeight = containerRect.height || 360;
+            
+            // Sync visual marbles with physics bodies
+            marbleBodies.forEach((body, index) => {
+                if (marbleElements[index] && !marbleElements[index].classList.contains('popping')) {
+                    const marble = marbleElements[index];
+                    const x = body.position.x;
+                    const y = body.position.y;
+                    
+                    // Convert physics coordinates to CSS (container is positioned relative)
+                    // Physics Y=0 is at top, CSS bottom=0 is at bottom, so we flip
+                    marble.style.left = (x - 20) + 'px'; // Subtract half marble size (40px / 2)
+                    marble.style.bottom = (jarHeight - y - 20) + 'px'; // Flip Y axis and subtract half size
+                    marble.style.transform = `rotate(${body.angle}rad)`;
+                    marble.style.display = ''; // Ensure marble is visible
+                }
+            });
+        }
         
         requestAnimationFrame(update);
     }
@@ -528,9 +539,11 @@ function revealMemory(memory) {
         isAnimating = false;
         insertCoinBtn.disabled = false;
         
-        // Reset marbles (physics will handle positioning)
+        // Don't remove 'popping' class here - keep it until we return to jar
+        // This prevents the popped marble from reappearing
         marbleElements.forEach(marble => {
-            marble.classList.remove('swirling', 'popping');
+            marble.classList.remove('swirling');
+            // Keep 'popping' class - will be removed when returning to jar
         });
     }, 2000);
 }
@@ -577,8 +590,8 @@ if (backBtn) {
                 marble.style.display = '';
                 
                 if (marble.classList.contains('popping')) {
+                    // Remove popping class and reset the marble's position
                     marble.classList.remove('popping');
-                    // Reset the marble's position in physics (let it fall back into jar)
                     if (marbleBodies[index]) {
                         const jarWidth = containerRect.width || 280;
                         const jarCenterX = jarWidth / 2;
@@ -592,6 +605,10 @@ if (backBtn) {
                             x: (Math.random() - 0.5) * 0.5,
                             y: 2 + Math.random() * 2
                         });
+                        
+                        // Update visual position immediately
+                        marble.style.left = (marbleBodies[index].position.x - 20) + 'px';
+                        marble.style.bottom = (jarHeight - marbleBodies[index].position.y - 20) + 'px';
                     }
                 } else {
                     // For marbles that weren't popped, restore their visual position from physics
@@ -612,22 +629,6 @@ if (backBtn) {
         // Ensure physics update is running
         if (!physicsUpdateRunning && isPhysicsInitialized) {
             startPhysicsUpdate();
-        } else if (physicsUpdateRunning) {
-            // Force an immediate update to sync positions
-            const containerRect = marblesContainer.getBoundingClientRect();
-            const jarHeight = containerRect.height || 360;
-            
-            marbleBodies.forEach((body, index) => {
-                if (marbleElements[index] && !marbleElements[index].classList.contains('popping')) {
-                    const marble = marbleElements[index];
-                    const x = body.position.x;
-                    const y = body.position.y;
-                    
-                    marble.style.left = (x - 20) + 'px';
-                    marble.style.bottom = (jarHeight - y - 20) + 'px';
-                    marble.style.transform = `rotate(${body.angle}rad)`;
-                }
-            });
         }
     });
 } else {
