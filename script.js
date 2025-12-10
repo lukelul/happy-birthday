@@ -68,7 +68,7 @@ const memories = [
         id: 3,
         color: "#C4B5FD", // Soft purple
         photos: [getPhotoPath(3)], // Photo 3
-        text: "This was when I went to Mecha in Calgary, it was really fun. A lot of my friends expected you to also come but you didn't which was sad, but that only made me more excited for Worlds. I still remember the first night we were on call and when we arrived at the Airbnb we couldn't get in because the locks froze, and you were super sick but you still stayed up for me. It's funny because in the past you would always stay up later than I would and I would always fall asleep first."
+        text: "This was when I went to Mecha in Calgary, it was really fun. A lot of my friends expected you to also come but you didn't which was sad, but that only made me more excited for Worlds. I still remember the first night we were on call and when we arrived at the Airbnb we couldn't get in because the locks froze, and you were super sick but you still stayed up for me. It's funny because in the past you would always stay up later than I would and I would always fall asleep first. We also exchanged Valentine gifts since that was around this time and that's when you wrote me that letter lol, I can still remember opening the gifts in my room so vividly. This was also the first time I ever tried poutine, you kept saying how good McDonald's poutine was, so I had to get poutine. We went to a breakfast poutine place and I got this salmon poutine, weird order it was kinda mid lol. Anyway you were my first valentine and I was your first."
     },
     {
         id: 4,
@@ -91,8 +91,8 @@ const memories = [
     {
         id: 7,
         color: "#86EFAC", // Soft green
-        photos: [getPhotoPath(31), getPhotoPath(32), getPhotoPath(33), getPhotoPath(34), getPhotoPath(35)], // Photos 31-35
-        text: "The day we tried that new restaurant… Your excitement about trying new foods together made every meal an adventure."
+        photos: [getPhotoPath(7), getPhotoPath(8), getPhotoPath(9)], // Photos 7-9
+        text: "This was my most vivid memory of anticipation to meet you. After so many late night talks and calls about the future we were finally going to meet in person that day in Dallas. I still remember I woke up so early that day, went to the store to get flowers and a lot of stuff, and then spent so long looking at myself in the mirror. Then your plane got delayed lol. And then when I got to your hotel it was raining but we didn't care. I still remember how fast my heart pounded when we were just separated by that door the first time."
     },
     {
         id: 8,
