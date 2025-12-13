@@ -505,6 +505,42 @@ function initializeMarbles() {
 }
 
 /**
+ * Restore marbles visibility and positions
+ * Call this when returning to jar scene
+ */
+function restoreMarbles() {
+    if (!isPhysicsInitialized || marbleElements.length === 0) {
+        return;
+    }
+    
+    setTimeout(() => {
+        const containerRect = marblesContainer.getBoundingClientRect();
+        const jarHeight = containerRect.height || 360;
+        
+        marbleElements.forEach((marble, index) => {
+            if (!marble || !marbleBodies[index]) return;
+            
+            // Make sure marble is visible
+            marble.style.display = '';
+            
+            const body = marbleBodies[index];
+            const x = body.position.x;
+            const y = body.position.y;
+            
+            // Update visual position immediately
+            marble.style.left = (x - 20) + 'px';
+            marble.style.bottom = (jarHeight - y - 20) + 'px';
+            marble.style.transform = `rotate(${body.angle}rad)`;
+        });
+        
+        // Ensure physics update is running
+        if (!physicsUpdateRunning && isPhysicsInitialized) {
+            startPhysicsUpdate();
+        }
+    }, 50);
+}
+
+/**
  * Update visual marbles based on physics positions
  */
 let physicsUpdateRunning = false;
@@ -911,6 +947,9 @@ if (backBtn) {
                     }
                 }
             });
+            
+            // Also call restoreMarbles to ensure everything is visible
+            restoreMarbles();
         }, 50);
         
         // Ensure physics update is running
@@ -991,6 +1030,9 @@ function hideGallery() {
     if (detailView) {
         detailView.classList.remove('active');
     }
+    
+    // Restore marbles visibility when returning to jar
+    restoreMarbles();
 }
 
 /**
@@ -1216,7 +1258,24 @@ document.addEventListener('mousemove', (e) => {
     }
 });
 
-// Reset jar position and gravity when mouse leaves
+// Reset jar position and gravity when mouse leaves the document (not just moving to buttons)
+// Use mouseout on document instead of mouseleave to better detect when leaving the window
+document.addEventListener('mouseout', (e) => {
+    // Only reset if mouse actually left the document/window, not just moving to a button
+    // relatedTarget will be null when leaving the window, or will be outside the document
+    if (!e.relatedTarget || (e.relatedTarget === document.body || !document.body.contains(e.relatedTarget))) {
+        jar.style.transform = 'translate(0, 0) rotateX(0deg) rotateY(0deg)';
+        jarTiltX = 0;
+        jarTiltY = 0;
+        
+        if (engine && isPhysicsInitialized) {
+            engine.world.gravity.x = 0;
+            engine.world.gravity.y = 1.5; // Reset to base gravity
+        }
+    }
+});
+
+// Also handle mouseleave on document for browsers that support it
 document.addEventListener('mouseleave', () => {
     jar.style.transform = 'translate(0, 0) rotateX(0deg) rotateY(0deg)';
     jarTiltX = 0;
