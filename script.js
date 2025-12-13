@@ -68,7 +68,7 @@ const memories = [
         id: 3,
         color: "#C4B5FD", // Soft purple
         photos: [getPhotoPath(3)], // Photo 3
-        text: "This was when I went to Mecha in Calgary, it was really fun. A lot of my friends expected you to also come but you didn't which was sad, but that only made me more excited for Worlds. I still remember the first night we were on call and when we arrived at the Airbnb we couldn't get in because the locks froze, and you were super sick but you still stayed up for me. It's funny because in the past you would always stay up later than I would and I would always fall asleep first. We also exchanged Valentine gifts since that was around this time and that's when you wrote me that letter lol, I can still remember opening the gifts in my room so vividly. This was also the first time I ever tried poutine, you kept saying how good McDonald's poutine was, so I had to get poutine. We went to a breakfast poutine place and I got this salmon poutine, weird order it was kinda mid lol. Anyway you were my first valentine and I was your first."
+        text: "This was when I went to Mecha in Calgary, it was really fun. A lot of my friends expected you to also come but you didn't which was sad, but that only made me more excited for Worlds. I still remember the first night we were on call and when we arrived at the Airbnb we couldn't get in because the locks froze, and you were super sick but you still stayed up for me. It's funny because in the past you would always stay up later than I would and I would always fall asleep first. We also exchanged Valentine gifts since that was around this time and that's when you wrote me that letter lol, I can still remember opening the gifts in my room so vividly. This was also the first time I ever tried poutine, you kept saying how good McDonald's poutine was, so I had to get poutine. We went to a breakfast poutine place and I got this salmon poutine, weird order it was kinda mid lol. Anyway you were my first valentine and I was your first. Mecha was also when you started liking me, I also started really liking you here."
     },
     {
         id: 4,
@@ -109,20 +109,26 @@ const memories = [
     {
         id: 10,
         color: "#60A5FA", // Soft indigo
-        photos: [getPhotoPath(46), getPhotoPath(47), getPhotoPath(48), getPhotoPath(49)], // Photos 46-49
-        text: "The first time you made me breakfast… It wasn't perfect, but it was made with love, and that made it perfect to me."
+        photos: [getPhotoPath(10), getPhotoPath(11)], // Photos 10-11
+        text: "This was when we went to the Dallas aquarium. I've lived in Dallas for a big portion of my life but I never got to go so this was my first time going too. I remember when we got there we couldn't find the entrance for so long lol, and then we went up this path that we thought was the exit but was the entrance. Inside we took photos in the water tunnel and it was so fun. When we were leaving it was raining so hard so we had to run to my car but we still both got drenched."
     },
     {
         id: 11,
         color: "#F87171", // Soft rose
-        photos: [getPhotoPath(50), getPhotoPath(51), getPhotoPath(52), getPhotoPath(53)], // Photos 50-53
-        text: "Dancing in the living room to our favorite song… Just the two of us, lost in the moment and each other."
+        photos: [getPhotoPath(12)], // Photo 12
+        text: "Then we ended up going to the mall after and we just walked around for a bit. Whatever we did I felt so fulfilled and happy on the inside."
     },
     {
         id: 12,
         color: "#34D399", // Soft emerald
-        photos: [getPhotoPath(54), getPhotoPath(55), getPhotoPath(56), getPhotoPath(57), getPhotoPath(58)], // Photos 54-58
-        text: "The way you look at me when you think I'm not watching… Those moments remind me how lucky I am to have you."
+        photos: [getPhotoPath(13)], // Photo 13
+        text: "This was the photo we took together in the dome for opening ceremony. I remember we sat in the very back but still got recognized by people."
+    },
+    {
+        id: 13,
+        color: "#A78BFA", // Soft violet
+        photos: [getPhotoPath(14)], // Photo 14
+        text: "This was when we walked around outside the convention center during a lunch break and took photos outside together. It was super hot outside especially in those Stussy hoodies lol."
     }
 ];
 
