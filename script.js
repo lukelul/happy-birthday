@@ -95,18 +95,6 @@ const memories = [
         text: "This was my most vivid memory of anticipation to meet you. After so many late night talks and calls about the future we were finally going to meet in person that day in Dallas. I still remember I woke up so early that day, went to the store to get flowers and a lot of stuff, and then spent so long looking at myself in the mirror. Then your plane got delayed lol. And then when I got to your hotel it was raining but we didn't care. I still remember how fast my heart pounded when we were just separated by that door the first time."
     },
     {
-        id: 8,
-        color: "#FBBF24", // Soft amber
-        photos: [getPhotoPath(36), getPhotoPath(37), getPhotoPath(38), getPhotoPath(39), getPhotoPath(40)], // Photos 36-40
-        text: "Our first road trip… Singing along to our favorite songs, getting lost, and making memories that will last forever."
-    },
-    {
-        id: 9,
-        color: "#F0ABFC", // Soft fuchsia
-        photos: [getPhotoPath(41), getPhotoPath(42), getPhotoPath(43), getPhotoPath(44), getPhotoPath(45)], // Photos 41-45
-        text: "That time we stayed up all night talking… When the sun rose, I realized I never wanted those conversations to end."
-    },
-    {
         id: 10,
         color: "#60A5FA", // Soft indigo
         photos: [getPhotoPath(10), getPhotoPath(11)], // Photos 10-11
