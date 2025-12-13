@@ -329,6 +329,7 @@ const memories = [
 // ============================================
 
 const introScene = document.getElementById('intro-scene');
+const skipIntroBtn = document.getElementById('skip-intro-btn');
 const jarScene = document.getElementById('jar-scene');
 const memoryScene = document.getElementById('memory-scene');
 const galleryScene = document.getElementById('gallery-scene');
@@ -1279,6 +1280,13 @@ function showIntro() {
     let currentMessageIndex = 0;
     introText.textContent = ''; // Clear initial content
     
+    // Show skip button after 3 seconds
+    setTimeout(() => {
+        if (skipIntroBtn) {
+            skipIntroBtn.classList.remove('hidden');
+        }
+    }, 3000);
+    
     function showNextMessage() {
         if (currentMessageIndex < introMessages.length) {
             const message = introMessages[currentMessageIndex];
@@ -1309,6 +1317,11 @@ function showIntro() {
 function fadeToJar() {
     if (!introScene || !jarScene) return;
     
+    // Hide skip button
+    if (skipIntroBtn) {
+        skipIntroBtn.classList.add('hidden');
+    }
+    
     introScene.classList.add('fade-out');
     
     setTimeout(() => {
@@ -1323,6 +1336,13 @@ function fadeToJar() {
             }, 200);
         }
     }, 1500);
+}
+
+// Skip intro button handler
+if (skipIntroBtn) {
+    skipIntroBtn.addEventListener('click', () => {
+        fadeToJar();
+    });
 }
 
 // Initialize physics and marbles on page load

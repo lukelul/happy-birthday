@@ -176,6 +176,36 @@ body {
     transition: opacity 1.5s ease-out;
 }
 
+.skip-intro-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+}
+
+.skip-intro-btn:not(.hidden) {
+    opacity: 1;
+}
+
+.skip-intro-btn:hover {
+    opacity: 0.8;
+}
+
+.skip-intro-btn.hidden {
+    display: none;
+}
+
 /* ============================================
    SPARKLES & PARTICLES
    ============================================ */
