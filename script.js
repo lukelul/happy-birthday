@@ -79,14 +79,14 @@ const memories = [
     {
         id: 5,
         color: "#FCA5A5", // Soft coral
-        photos: [getPhotoPath(21), getPhotoPath(22), getPhotoPath(23), getPhotoPath(24), getPhotoPath(25)], // Photos 21-25
-        text: "Our first laugh together… That moment when we both couldn't stop giggling, and I realized how much joy you bring into my life."
+        photos: [getPhotoPath(15)], // Photo 15
+        text: "This was during Worlds, we would sneak into this top area in the Omni hotel and cuddle lol. I was so happy and was trying to get away from the competition to go be with you."
     },
     {
         id: 6,
         color: "#93C5FD", // Soft sky blue
-        photos: [getPhotoPath(26), getPhotoPath(27), getPhotoPath(28), getPhotoPath(29), getPhotoPath(30)], // Photos 26-30
-        text: "The surprise you planned for me… Your thoughtfulness and the way you care about making me happy means everything to me."
+        photos: [getPhotoPath(16)], // Photo 16
+        text: "This was in your hotel at Worlds when we went on the balcony and looked out the window and just laid there and talked and cuddled."
     },
     {
         id: 7,
@@ -129,6 +129,72 @@ const memories = [
         color: "#A78BFA", // Soft violet
         photos: [getPhotoPath(14)], // Photo 14
         text: "This was when we walked around outside the convention center during a lunch break and took photos outside together. It was super hot outside especially in those Stussy hoodies lol."
+    },
+    {
+        id: 14,
+        color: "#F472B6", // Soft pink
+        photos: [getPhotoPath(17)], // Photo 17
+        text: "This was the BBQ we ate at Worlds on the last day."
+    },
+    {
+        id: 15,
+        color: "#818CF8", // Soft indigo
+        photos: [getPhotoPath(18)], // Photo 18
+        text: "This was when we went up on Reunion Tower in Dallas after Worlds. Maybe we'll see each other again sometime."
+    },
+    {
+        id: 16,
+        color: "#34D399", // Soft emerald
+        photos: [getPhotoPath(19)], // Photo 19
+        text: "This was the second time we met. I just got to my hotel and you got out of school. I got you flowers and I even brought my fav cookies and flower lol. I'm bringing some cookies to Paris just in case... The whole plane ride I was so excited to get off and see you."
+    },
+    {
+        id: 17,
+        color: "#FBBF24", // Soft amber
+        photos: [getPhotoPath(20)], // Photo 20
+        text: "We went to eat at this restaurant. I got steak and you got pizza and I remember your pizza had salami on it and it was sooo salty so I had to eat a lot of it."
+    },
+    {
+        id: 18,
+        color: "#60A5FA", // Soft blue
+        photos: [getPhotoPath(21), getPhotoPath(22)], // Photos 21-22
+        text: "This was the first time in Toronto when we went on a ferry to go onto the island. I remember when waiting we sat on this wooden bench and you took one of these photos."
+    },
+    {
+        id: 19,
+        color: "#A78BFA", // Soft violet
+        photos: [getPhotoPath(23), getPhotoPath(24)], // Photos 23-24
+        text: "This was when we took the ferry to go onto the island. The wind was super bad so our hair was getting cooked but finally on the way back we got some good photos."
+    },
+    {
+        id: 20,
+        color: "#F87171", // Soft rose
+        photos: [getPhotoPath(25), getPhotoPath(26)], // Photos 25-26
+        text: "I remember you were sick during this time so we even went out to buy you medicine lol and this was some food that we ate."
+    },
+    {
+        id: 21,
+        color: "#FCD34D", // Soft yellow
+        photos: [getPhotoPath(27)], // Photo 27
+        text: "This was the second day I was in Toronto for the first time, we went to downtown."
+    },
+    {
+        id: 22,
+        color: "#86EFAC", // Soft green
+        photos: [getPhotoPath(28)], // Photo 28
+        text: "We were tired and waiting for our reservation inside the YYZ tower so we sat down and look at how cute we were lol."
+    },
+    {
+        id: 23,
+        color: "#C4B5FD", // Soft purple
+        photos: [getPhotoPath(29), getPhotoPath(30)], // Photos 29-30
+        text: "This was when we ate together on top of the YYZ tower. It was so cool I remember it would spin. We got this sparkling water that I didn't know had alcohol in it and I called it an acquired taste lmao. I will never forget."
+    },
+    {
+        id: 24,
+        color: "#F0ABFC", // Soft fuchsia
+        photos: [getPhotoPath(31), getPhotoPath(32)], // Photos 31-32
+        text: "We took some really cute photos together on the YYZ tower after eating and we took an Uber back lol so expensive but it was so worth it."
     }
 ];
 
