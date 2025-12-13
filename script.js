@@ -509,7 +509,23 @@ function initializeMarbles() {
  * Call this when returning to jar scene
  */
 function restoreMarbles() {
-    if (!isPhysicsInitialized || marbleElements.length === 0) {
+    if (!isPhysicsInitialized) {
+        return;
+    }
+    
+    // Check if marbles exist in DOM, if not, reinitialize
+    const existingMarbles = marblesContainer.querySelectorAll('.marble');
+    if (existingMarbles.length === 0 && memories.length > 0) {
+        // Marbles were removed, reinitialize them
+        console.log('Marbles missing, reinitializing...');
+        initializeMarbles();
+        return;
+    }
+    
+    // Ensure we have the same number of marbles as memories
+    if (marbleElements.length !== memories.length) {
+        console.log('Marble count mismatch, reinitializing...');
+        initializeMarbles();
         return;
     }
     
@@ -518,26 +534,37 @@ function restoreMarbles() {
         const jarHeight = containerRect.height || 360;
         
         marbleElements.forEach((marble, index) => {
-            if (!marble || !marbleBodies[index]) return;
+            if (!marble) return;
+            
+            // Check if marble is still in DOM
+            if (!marblesContainer.contains(marble)) {
+                // Marble was removed from DOM, need to recreate
+                console.log(`Marble ${index} missing from DOM, will reinitialize`);
+                return;
+            }
             
             // Make sure marble is visible
             marble.style.display = '';
+            marble.style.visibility = 'visible';
+            marble.style.opacity = '1';
             
-            const body = marbleBodies[index];
-            const x = body.position.x;
-            const y = body.position.y;
-            
-            // Update visual position immediately
-            marble.style.left = (x - 20) + 'px';
-            marble.style.bottom = (jarHeight - y - 20) + 'px';
-            marble.style.transform = `rotate(${body.angle}rad)`;
+            if (marbleBodies[index]) {
+                const body = marbleBodies[index];
+                const x = body.position.x;
+                const y = body.position.y;
+                
+                // Update visual position immediately
+                marble.style.left = (x - 20) + 'px';
+                marble.style.bottom = (jarHeight - y - 20) + 'px';
+                marble.style.transform = `rotate(${body.angle}rad)`;
+            }
         });
         
         // Ensure physics update is running
         if (!physicsUpdateRunning && isPhysicsInitialized) {
             startPhysicsUpdate();
         }
-    }, 50);
+    }, 100);
 }
 
 /**
@@ -582,6 +609,13 @@ function startPhysicsUpdate() {
             marbleBodies.forEach((body, index) => {
                 if (marbleElements[index] && !marbleElements[index].classList.contains('popping')) {
                     const marble = marbleElements[index];
+                    
+                    // Ensure marble is in DOM and visible
+                    if (!marblesContainer.contains(marble)) {
+                        // Marble was removed, recreate it
+                        marblesContainer.appendChild(marble);
+                    }
+                    
                     const x = body.position.x;
                     const y = body.position.y;
                     
@@ -591,6 +625,8 @@ function startPhysicsUpdate() {
                     marble.style.bottom = (jarHeight - y - 20) + 'px'; // Flip Y axis and subtract half size
                     marble.style.transform = `rotate(${body.angle}rad)`;
                     marble.style.display = ''; // Ensure marble is visible
+                    marble.style.visibility = 'visible';
+                    marble.style.opacity = '1';
                 }
             });
         }
@@ -1032,7 +1068,10 @@ function hideGallery() {
     }
     
     // Restore marbles visibility when returning to jar
-    restoreMarbles();
+    // Use a longer delay to ensure scene transition is complete
+    setTimeout(() => {
+        restoreMarbles();
+    }, 150);
 }
 
 /**
