@@ -509,7 +509,11 @@ function initializeMarbles() {
  * Call this when returning to jar scene
  */
 function restoreMarbles() {
-    if (!isPhysicsInitialized) {
+    // Always check if physics is initialized first
+    if (!isPhysicsInitialized || !engine) {
+        console.log('Physics not initialized, initializing...');
+        initializePhysics();
+        initializeMarbles();
         return;
     }
     
@@ -517,54 +521,60 @@ function restoreMarbles() {
     const existingMarbles = marblesContainer.querySelectorAll('.marble');
     if (existingMarbles.length === 0 && memories.length > 0) {
         // Marbles were removed, reinitialize them
-        console.log('Marbles missing, reinitializing...');
+        console.log('Marbles missing from DOM, reinitializing...');
         initializeMarbles();
         return;
     }
     
     // Ensure we have the same number of marbles as memories
-    if (marbleElements.length !== memories.length) {
+    if (marbleElements.length !== memories.length || marbleBodies.length !== memories.length) {
         console.log('Marble count mismatch, reinitializing...');
         initializeMarbles();
         return;
     }
     
+    // Check if any marbles are missing from DOM
+    let missingMarbles = false;
+    marbleElements.forEach((marble, index) => {
+        if (!marble || !marblesContainer.contains(marble)) {
+            missingMarbles = true;
+        }
+    });
+    
+    if (missingMarbles) {
+        console.log('Some marbles missing from DOM, reinitializing...');
+        initializeMarbles();
+        return;
+    }
+    
+    // Restore visibility and positions
     setTimeout(() => {
         const containerRect = marblesContainer.getBoundingClientRect();
         const jarHeight = containerRect.height || 360;
         
         marbleElements.forEach((marble, index) => {
-            if (!marble) return;
-            
-            // Check if marble is still in DOM
-            if (!marblesContainer.contains(marble)) {
-                // Marble was removed from DOM, need to recreate
-                console.log(`Marble ${index} missing from DOM, will reinitialize`);
-                return;
-            }
+            if (!marble || !marbleBodies[index]) return;
             
             // Make sure marble is visible
             marble.style.display = '';
             marble.style.visibility = 'visible';
             marble.style.opacity = '1';
             
-            if (marbleBodies[index]) {
-                const body = marbleBodies[index];
-                const x = body.position.x;
-                const y = body.position.y;
-                
-                // Update visual position immediately
-                marble.style.left = (x - 20) + 'px';
-                marble.style.bottom = (jarHeight - y - 20) + 'px';
-                marble.style.transform = `rotate(${body.angle}rad)`;
-            }
+            const body = marbleBodies[index];
+            const x = body.position.x;
+            const y = body.position.y;
+            
+            // Update visual position immediately
+            marble.style.left = (x - 20) + 'px';
+            marble.style.bottom = (jarHeight - y - 20) + 'px';
+            marble.style.transform = `rotate(${body.angle}rad)`;
         });
         
         // Ensure physics update is running
         if (!physicsUpdateRunning && isPhysicsInitialized) {
             startPhysicsUpdate();
         }
-    }, 100);
+    }, 150);
 }
 
 /**
@@ -945,8 +955,12 @@ if (backBtn) {
             const jarHeight = containerRect.height || 360;
             
             marbleElements.forEach((marble, index) => {
+                if (!marble) return;
+                
                 // Make sure marble is visible
                 marble.style.display = '';
+                marble.style.visibility = 'visible';
+                marble.style.opacity = '1';
                 
                 if (marble.classList.contains('popping')) {
                     // Remove popping class and reset the marble's position
@@ -986,7 +1000,7 @@ if (backBtn) {
             
             // Also call restoreMarbles to ensure everything is visible
             restoreMarbles();
-        }, 50);
+        }, 100);
         
         // Ensure physics update is running
         if (!physicsUpdateRunning && isPhysicsInitialized) {
@@ -1071,7 +1085,7 @@ function hideGallery() {
     // Use a longer delay to ensure scene transition is complete
     setTimeout(() => {
         restoreMarbles();
-    }, 150);
+    }, 200);
 }
 
 /**
@@ -1261,7 +1275,33 @@ document.addEventListener('visibilitychange', () => {
 // ============================================
 // MOUSE TRACKING & JAR TILT
 // ============================================
-// Removed mouse tracking to prevent marbles from disappearing
+
+/**
+ * Update jar position and tilt based on mouse movement (visual only, no physics changes)
+ */
+document.addEventListener('mousemove', (e) => {
+    if (!isAnimating && jarScene.classList.contains('active')) {
+        // Calculate mouse position relative to center
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        const mouseX = (e.clientX - centerX) / window.innerWidth;
+        const mouseY = (e.clientY - centerY) / window.innerHeight;
+        
+        // Simple visual movement only - no physics changes
+        const translateX = mouseX * 15; // Reduced movement
+        const translateY = mouseY * 15;
+        const rotateX = mouseY * 3; // Reduced rotation
+        const rotateY = mouseX * 3;
+        
+        jar.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    }
+});
+
+// Reset jar position when mouse leaves
+document.addEventListener('mouseleave', () => {
+    jar.style.transform = 'translate(0, 0) rotateX(0deg) rotateY(0deg)';
+});
 
 // ============================================
 // CLICK SPARKLE ANIMATION
