@@ -492,6 +492,8 @@ body {
     max-width: 90%;
     max-height: 95vh;
     z-index: 10;
+    width: 100%;
+    overflow: visible; /* Allow button to be visible */
 }
 
 .revealed-marble {
@@ -538,8 +540,11 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 20px;
+    padding-bottom: 100px; /* Extra padding at bottom to prevent button overlap */
     flex: 1;
     min-height: 0; /* Allow flex shrinking */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    overscroll-behavior: contain; /* Prevent scroll chaining */
 }
 
 .memory-content.hidden {
@@ -641,6 +646,7 @@ body {
     max-width: 600px;
     text-align: center;
     padding: 20px;
+    padding-bottom: 40px; /* Extra padding to prevent button overlap */
 }
 
 .memory-text {
@@ -682,7 +688,7 @@ body {
 }
 
 .back-btn:hover {
-    transform: translateY(-2px);
+    transform: translateX(-50%) translateY(-2px);
     box-shadow: 0 12px 30px rgba(255, 105, 180, 0.6), inset 0 2px 5px rgba(255, 255, 255, 0.4);
 }
 
