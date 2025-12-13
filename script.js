@@ -225,6 +225,102 @@ const memories = [
         color: "#FCA5A5", // Soft coral
         photos: [getPhotoPath(37), getPhotoPath(38)], // Photos 37-38
         text: "We ate malatang and BBQ but we didn't finish the malatang lol. I still remember we left it in your Tesla and said we would eat it later or something."
+    },
+    {
+        id: 30,
+        color: "#93C5FD", // Soft sky blue
+        photos: [getPhotoPath(39), getPhotoPath(40), getPhotoPath(41)], // Photos 39-41
+        text: "Just more together photos going through Chinatowns and plazas together this summer in Markham. Made me feel so hopeful for the future and we were so in love."
+    },
+    {
+        id: 31,
+        color: "#86EFAC", // Soft green
+        photos: [getPhotoPath(42), getPhotoPath(43)], // Photos 42-43
+        text: "Some more yummy meals we ate. First one was the super expensive Brazilian BBQ I thought it was ok and you thought it was so expensive which was true lol. Second one was the breakfast we had. Tbh Markham/Toronto is so nice I would have no problem moving there in the future with you if I could and we were together."
+    },
+    {
+        id: 32,
+        color: "#FBBF24", // Soft amber
+        photos: [getPhotoPath(44), getPhotoPath(45)], // Photos 44-45
+        text: "This was a photo of us eating together at that breakfast place. I remember there was a bug behind you so then we swapped places. Second photo is more KBBQ we ate! I love KBBQ and the corn and cheese on this was so delicious."
+    },
+    {
+        id: 33,
+        color: "#F0ABFC", // Soft fuchsia
+        photos: [getPhotoPath(46)], // Photo 46
+        text: "This was after we both dyed our hair together in the hotel lol. I remember we went to an Asian mall and got hair dye and came back and like tried to dye it twice but it didn't really show on my hair. I think it showed on yours pretty faintly though. It looked really nice."
+    },
+    {
+        id: 34,
+        color: "#60A5FA", // Soft indigo
+        photos: [getPhotoPath(47)], // Photo 47
+        text: "This was the first time we went karaoking together and it was the first time I went to karaoke. It was so fun I wish we had that around my area and I could go too. I love how you sing you sing so well that's one thing I like so much about you I can never forget your voice. Your voice is so cute omg."
+    },
+    {
+        id: 35,
+        color: "#F87171", // Soft rose
+        photos: [getPhotoPath(48)], // Photo 48
+        text: "This was when we went to the lake together. The water was kinda cold but it was really fun. I remember I got to fly my drone around and we sat on this bench and I illegally drank some beer."
+    },
+    {
+        id: 36,
+        color: "#34D399", // Soft emerald
+        photos: [getPhotoPath(49)], // Photo 49
+        text: "This was after we went to that lake and beach. We went to the mall and I got this pair of black pants that you really like and I also got this watch that I still wear today. It has our initials L A engraved on the back."
+    },
+    {
+        id: 37,
+        color: "#A78BFA", // Soft violet
+        photos: [getPhotoPath(50)], // Photo 50
+        text: "This was when your parents got mad that you weren't studying enough and spent too much time in my hotel, so we decided to bring our date to the library and wrote essays and got work done. This was also when I launched robocoaching."
+    },
+    {
+        id: 38,
+        color: "#F472B6", // Soft pink
+        photos: [getPhotoPath(51)], // Photo 51
+        text: "This was when we went to eat hotpot. I remember we sat next to each other and told each other about our pasts and people we talked to and grew closer. I really don't want you to just become a person on my dating resume..."
+    },
+    {
+        id: 39,
+        color: "#818CF8", // Soft indigo
+        photos: [getPhotoPath(52)], // Photo 52
+        text: "This might be my favorite memory. This was the afternoon before I had to leave and we hung out in the park around your house and we biked around. I haven't biked in so long before this I basically completely forgot so it was so fun to fail and learn with you on my side. That's why I like our relationship so much and why I value it so much, because we are always failing and coming back together to learn with each other. This moment made me wish with my whole soul that we were actually living in the same neighborhood, maybe in another life."
+    },
+    {
+        id: 40,
+        color: "#FCD34D", // Soft yellow
+        photos: [getPhotoPath(53)], // Photo 53
+        text: "This was when we interviewed that MIT professor about the rescue robot lol. I remember you were shining so bright that day."
+    },
+    {
+        id: 41,
+        color: "#C4B5FD", // Soft purple
+        photos: [getPhotoPath(54)], // Photo 54
+        text: "This was the last time we met so far. We both traveled out to Jersey to volunteer at the Highlander SIG and it felt like we were traveling together and it was so much fun. We got to spend a lot of time together it was so amazing even though it was still short."
+    },
+    {
+        id: 42,
+        color: "#FCA5A5", // Soft coral
+        photos: [getPhotoPath(55)], // Photo 55
+        text: "Photo we took together in front of the signature event venue sign. We look so good together lol."
+    },
+    {
+        id: 43,
+        color: "#86EFAC", // Soft green
+        photos: [getPhotoPath(56)], // Photo 56
+        text: "This was when we went to NYC after the first day we were at the SIG. This was really fun actually even though I was tired. If I could go back I wish I would've stayed in the city for longer with you. I think moving on I would live my life more and spend more time doing stuff that I couldn't do if I went back or I couldn't go back to do again."
+    },
+    {
+        id: 44,
+        color: "#93C5FD", // Soft sky blue
+        photos: [getPhotoPath(57)], // Photo 57
+        text: "This was the last time we were at the airport together. It felt like we were traveling together but we couldn't go back to the same place. I wish I could've brought you back to Austin or I could've went home with you to Markham but that's just how life is I guess. I wish we could still travel in the future together but I don't know anymore after everything and I feel so hurt."
+    },
+    {
+        id: 45,
+        color: "#F9A8D4", // Soft pink
+        photos: [getPhotoPath(58)], // Photo 58
+        text: "This is the last photo. This was your birthday gift to me and I thought it was really amazing and I loved it so I thought it was only fair that I make one that also takes a lot of time and effort and means a lot to the both of us. So I made this memory jar because I believe all of these memories are incredibly important."
     }
 ];
 
