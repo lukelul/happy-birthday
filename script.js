@@ -116,7 +116,7 @@ const memories = [
         id: 11,
         color: "#F87171", // Soft rose
         photos: [getPhotoPath(12)], // Photo 12
-        text: "Then we ended up going to the mall after and we just walked around for a bit. Whatever we did I felt so fulfilled and happy on the inside."
+        text: "This was the time when we went to the mall in Dallas after we went to the aquarium. We just walked around for a bit. Whatever we did I felt so fulfilled and happy on the inside."
     },
     {
         id: 12,
@@ -170,7 +170,7 @@ const memories = [
         id: 20,
         color: "#F87171", // Soft rose
         photos: [getPhotoPath(25), getPhotoPath(26)], // Photos 25-26
-        text: "I remember you were sick during this time so we even went out to buy you medicine lol and this was some food that we ate."
+        text: "I remember this time when you were sick during my first trip to Toronto. So we even went out to buy you medicine lol and this was some food that we ate."
     },
     {
         id: 21,
@@ -182,7 +182,7 @@ const memories = [
         id: 22,
         color: "#86EFAC", // Soft green
         photos: [getPhotoPath(28)], // Photo 28
-        text: "We were tired and waiting for our reservation inside the YYZ tower so we sat down and look at how cute we were lol."
+        text: "This was the time when we were waiting for our dinner reservation on the YYZ tower after walking around downtown, so bc we were tired we sat down and look at how cute we were lol."
     },
     {
         id: 23,
