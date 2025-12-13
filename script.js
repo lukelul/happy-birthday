@@ -328,6 +328,7 @@ const memories = [
 // DOM ELEMENTS
 // ============================================
 
+const introScene = document.getElementById('intro-scene');
 const jarScene = document.getElementById('jar-scene');
 const memoryScene = document.getElementById('memory-scene');
 const galleryScene = document.getElementById('gallery-scene');
@@ -1205,19 +1206,113 @@ if (galleryBackBtn) {
     });
 }
 
-// Initialize physics and marbles on page load
-window.addEventListener('DOMContentLoaded', () => {
-    // Wait for Matter.js to be fully loaded
-    if (typeof Matter === 'undefined') {
-        console.error('Matter.js not loaded!');
-        return;
+// ============================================
+// INTRO SCREEN WITH TYPEWRITER EFFECT
+// ============================================
+
+const introText = document.getElementById('intro-text');
+
+const introMessages = [
+    "hi angie. today is your birthday —\n\n",
+    "\nthe 346th day since the day i met you.\n\n",
+    "\nisn't that a little poetic?\n\n",
+    "\nfor your birthday, i made a little memory jar,\n\n",
+    "\nbecause i truly enjoyed so many moments with you.\n\n",
+    "\neach one holds a small piece of something i'll always be grateful for.\n\n",
+    "\nhappy birthday 🤍"
+];
+
+/**
+ * Typewriter effect for intro text
+ */
+function typeWriter(text, element, speed = 50, callback) {
+    let i = 0;
+    element.innerHTML = '';
+    
+    function type() {
+        if (i < text.length) {
+            element.innerHTML = text.substring(0, i + 1) + '<span class="typewriter-cursor"></span>';
+            i++;
+            setTimeout(type, speed);
+        } else {
+            element.innerHTML = text;
+            if (callback) callback();
+        }
     }
     
-    initializePhysics();
-    // Wait a bit for the scene to be ready
+    type();
+}
+
+/**
+ * Show intro screen with typewriter effect
+ */
+function showIntro() {
+    if (!introScene || !introText) return;
+    
+    let currentMessageIndex = 0;
+    let fullText = '';
+    
+    function showNextMessage() {
+        if (currentMessageIndex < introMessages.length) {
+            fullText += introMessages[currentMessageIndex];
+            typeWriter(fullText, introText, 30, () => {
+                // Wait a bit before showing next message
+                setTimeout(() => {
+                    currentMessageIndex++;
+                    if (currentMessageIndex < introMessages.length) {
+                        showNextMessage();
+                    } else {
+                        // All messages shown, wait then fade out
+                        setTimeout(() => {
+                            fadeToJar();
+                        }, 2000);
+                    }
+                }, 800);
+            });
+        }
+    }
+    
+    showNextMessage();
+}
+
+/**
+ * Fade from intro to jar scene
+ */
+function fadeToJar() {
+    if (!introScene || !jarScene) return;
+    
+    introScene.classList.add('fade-out');
+    
+    setTimeout(() => {
+        introScene.classList.remove('active');
+        jarScene.classList.add('active');
+        
+        // Initialize physics and marbles after transition
+        if (typeof Matter !== 'undefined') {
+            initializePhysics();
             setTimeout(() => {
-        initializeMarbles();
-    }, 200);
+                initializeMarbles();
+            }, 200);
+        }
+    }, 1500);
+}
+
+// Initialize physics and marbles on page load
+window.addEventListener('DOMContentLoaded', () => {
+    // Show intro first
+    if (introScene && introScene.classList.contains('active')) {
+        setTimeout(() => {
+            showIntro();
+        }, 500);
+    } else {
+        // If intro is skipped, initialize normally
+        if (typeof Matter !== 'undefined') {
+            initializePhysics();
+            setTimeout(() => {
+                initializeMarbles();
+            }, 200);
+        }
+    }
 });
 
 // ============================================
