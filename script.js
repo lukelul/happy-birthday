@@ -556,10 +556,17 @@ function restoreMarbles() {
         marbleElements.forEach((marble, index) => {
             if (!marble || !marbleBodies[index]) return;
             
+            // Ensure marble is in DOM - re-add if missing
+            if (!marblesContainer.contains(marble)) {
+                console.log(`Re-adding marble ${index} to DOM`);
+                marblesContainer.appendChild(marble);
+            }
+            
             // Make sure marble is visible
             marble.style.display = '';
             marble.style.visibility = 'visible';
             marble.style.opacity = '1';
+            marble.style.zIndex = '1';
             
             const body = marbleBodies[index];
             const x = body.position.x;
@@ -624,8 +631,15 @@ function startPhysicsUpdate() {
                     // Ensure marble is in DOM and visible
                     if (!marblesContainer.contains(marble)) {
                         // Marble was removed, recreate it
+                        console.log(`Physics loop: Re-adding marble ${index} to DOM`);
                         marblesContainer.appendChild(marble);
                     }
+                    
+                    // Always ensure visibility
+                    marble.style.display = '';
+                    marble.style.visibility = 'visible';
+                    marble.style.opacity = '1';
+                    marble.style.zIndex = '1';
                     
                     const x = body.position.x;
                     const y = body.position.y;
@@ -635,9 +649,6 @@ function startPhysicsUpdate() {
                     marble.style.left = (x - 20) + 'px'; // Subtract half marble size (40px / 2)
                     marble.style.bottom = (jarHeight - y - 20) + 'px'; // Flip Y axis and subtract half size
                     marble.style.transform = `rotate(${body.angle}rad)`;
-                    marble.style.display = ''; // Ensure marble is visible
-                    marble.style.visibility = 'visible';
-                    marble.style.opacity = '1';
                 }
             });
         }
@@ -949,24 +960,38 @@ if (backBtn) {
             jarScene.classList.add('active');
         }
         
-        // Restore the popped marble and ensure all marbles are visible
-        // Remove 'popping' class from any marbles that were popped and reset their position
+        // First, call restoreMarbles which will check and reinitialize if needed
         setTimeout(() => {
-            const containerRect = marblesContainer.getBoundingClientRect();
-            const jarHeight = containerRect.height || 360;
+            restoreMarbles();
             
-            marbleElements.forEach((marble, index) => {
-                if (!marble) return;
+            // Then restore the popped marble and ensure all marbles are visible
+            setTimeout(() => {
+                const containerRect = marblesContainer.getBoundingClientRect();
+                const jarHeight = containerRect.height || 360;
                 
-                // Make sure marble is visible
-                marble.style.display = '';
-                marble.style.visibility = 'visible';
-                marble.style.opacity = '1';
+                // Check if marbles exist before trying to restore them
+                if (marbleElements.length === 0 || marbleBodies.length === 0) {
+                    console.log('No marbles found, reinitializing...');
+                    initializeMarbles();
+                    return;
+                }
                 
-                if (marble.classList.contains('popping')) {
-                    // Remove popping class and reset the marble's position
-                    marble.classList.remove('popping');
-                    if (marbleBodies[index]) {
+                marbleElements.forEach((marble, index) => {
+                    if (!marble || !marbleBodies[index]) return;
+                    
+                    // Ensure marble is in DOM
+                    if (!marblesContainer.contains(marble)) {
+                        marblesContainer.appendChild(marble);
+                    }
+                    
+                    // Make sure marble is visible
+                    marble.style.display = '';
+                    marble.style.visibility = 'visible';
+                    marble.style.opacity = '1';
+                    
+                    if (marble.classList.contains('popping')) {
+                        // Remove popping class and reset the marble's position
+                        marble.classList.remove('popping');
                         const jarWidth = containerRect.width || 280;
                         const jarCenterX = jarWidth / 2;
                         
@@ -983,10 +1008,8 @@ if (backBtn) {
                         // Update visual position immediately
                         marble.style.left = (marbleBodies[index].position.x - 20) + 'px';
                         marble.style.bottom = (jarHeight - marbleBodies[index].position.y - 20) + 'px';
-                    }
-                } else {
-                    // For marbles that weren't popped, restore their visual position from physics
-                    if (marbleBodies[index]) {
+                    } else {
+                        // For marbles that weren't popped, restore their visual position from physics
                         const body = marbleBodies[index];
                         const x = body.position.x;
                         const y = body.position.y;
@@ -996,12 +1019,9 @@ if (backBtn) {
                         marble.style.bottom = (jarHeight - y - 20) + 'px';
                         marble.style.transform = `rotate(${body.angle}rad)`;
                     }
-                }
-            });
-            
-            // Also call restoreMarbles to ensure everything is visible
-            restoreMarbles();
-        }, 100);
+                });
+            }, 50);
+        }, 150);
         
         // Ensure physics update is running
         if (!physicsUpdateRunning && isPhysicsInitialized) {
