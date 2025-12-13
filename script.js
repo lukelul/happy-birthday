@@ -195,6 +195,36 @@ const memories = [
         color: "#F0ABFC", // Soft fuchsia
         photos: [getPhotoPath(31), getPhotoPath(32)], // Photos 31-32
         text: "We took some really cute photos together on the YYZ tower after eating and we took an Uber back lol so expensive but it was so worth it."
+    },
+    {
+        id: 25,
+        color: "#F9A8D4", // Soft pink
+        photos: [getPhotoPath(33)], // Photo 33
+        text: "This was after my internship in China and I remember we still called every day even though we had a 12 or 13 hour time difference. And after my internship I flew across the world to come see you. I flew for over 20 hours but I was so excited I couldn't even sleep because I knew I was going to see you soon."
+    },
+    {
+        id: 26,
+        color: "#A5F3FC", // Soft blue
+        photos: [getPhotoPath(34)], // Photo 34
+        text: "This was the first whole day of the last time I was in Toronto. It was July 4th and we went to watch the fireworks at the falls and it was so pretty. It was so fun I love road trips."
+    },
+    {
+        id: 27,
+        color: "#C4B5FD", // Soft purple
+        photos: [getPhotoPath(35)], // Photo 35
+        text: "This was also during when we went to watch the fireworks with your parents. I remember we ate at this restaurant next to the falls and after we finished eating we started throwing food down over the balcony when no one was looking."
+    },
+    {
+        id: 28,
+        color: "#FCD34D", // Soft yellow
+        photos: [getPhotoPath(36)], // Photo 36
+        text: "This was when we went to a photo booth together. Makes me feel like we are such a normal couple and not LDR."
+    },
+    {
+        id: 29,
+        color: "#FCA5A5", // Soft coral
+        photos: [getPhotoPath(37), getPhotoPath(38)], // Photos 37-38
+        text: "We ate malatang and BBQ but we didn't finish the malatang lol. I still remember we left it in your Tesla and said we would eat it later or something."
     }
 ];
 
