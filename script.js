@@ -1261,70 +1261,7 @@ document.addEventListener('visibilitychange', () => {
 // ============================================
 // MOUSE TRACKING & JAR TILT
 // ============================================
-
-let mouseX = 0;
-let mouseY = 0;
-let jarTiltX = 0;
-let jarTiltY = 0;
-
-/**
- * Update jar position and tilt based on mouse movement
- * This affects the gravity direction for marbles
- */
-document.addEventListener('mousemove', (e) => {
-    if (!isAnimating && jarScene.classList.contains('active')) {
-        // Calculate mouse position relative to center
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        
-        mouseX = (e.clientX - centerX) / window.innerWidth;
-        mouseY = (e.clientY - centerY) / window.innerHeight;
-        
-        // Limit tilt amount
-        jarTiltX = Math.max(-0.5, Math.min(0.5, mouseX * 0.5));
-        jarTiltY = Math.max(-0.5, Math.min(0.5, mouseY * 0.5));
-        
-        // Move jar visually (but don't affect marble physics)
-        const translateX = mouseX * 20;
-        const translateY = mouseY * 20;
-        jar.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${jarTiltY * 5}deg) rotateY(${jarTiltX * 5}deg)`;
-        
-        // Keep gravity constant - marbles don't move with mouse
-        if (engine && isPhysicsInitialized) {
-            engine.world.gravity.x = 0;
-            engine.world.gravity.y = 1.5; // Constant downward gravity
-        }
-    }
-});
-
-// Reset jar position and gravity when mouse leaves the document (not just moving to buttons)
-// Use mouseout on document instead of mouseleave to better detect when leaving the window
-document.addEventListener('mouseout', (e) => {
-    // Only reset if mouse actually left the document/window, not just moving to a button
-    // relatedTarget will be null when leaving the window, or will be outside the document
-    if (!e.relatedTarget || (e.relatedTarget === document.body || !document.body.contains(e.relatedTarget))) {
-        jar.style.transform = 'translate(0, 0) rotateX(0deg) rotateY(0deg)';
-        jarTiltX = 0;
-        jarTiltY = 0;
-        
-        if (engine && isPhysicsInitialized) {
-            engine.world.gravity.x = 0;
-            engine.world.gravity.y = 1.5; // Reset to base gravity
-        }
-    }
-});
-
-// Also handle mouseleave on document for browsers that support it
-document.addEventListener('mouseleave', () => {
-    jar.style.transform = 'translate(0, 0) rotateX(0deg) rotateY(0deg)';
-    jarTiltX = 0;
-    jarTiltY = 0;
-    
-    if (engine && isPhysicsInitialized) {
-        engine.world.gravity.x = 0;
-        engine.world.gravity.y = 1.5; // Reset to base gravity
-    }
-});
+// Removed mouse tracking to prevent marbles from disappearing
 
 // ============================================
 // CLICK SPARKLE ANIMATION
