@@ -1223,27 +1223,26 @@ const introMessages = [
 ];
 
 /**
- * Typewriter effect for intro text - appends to existing text
- * @param {string} textToAdd - The text to append
+ * Typewriter effect for intro text - types one message at a time
+ * @param {string} text - The text to type
  * @param {HTMLElement} element - The element to update
- * @param {string} existingText - The text that's already been typed (to preserve it)
  * @param {number} speed - Typing speed in ms
  * @param {function} callback - Callback when done
  */
-function typeWriterAppend(textToAdd, element, existingText, speed = 80, callback) {
+function typeWriter(text, element, speed = 80, callback) {
     let i = 0;
+    // Clear previous text
+    element.innerHTML = '';
     
     function type() {
-        if (i < textToAdd.length) {
-            // Build the text: existing + new characters typed so far + cursor
-            const newText = existingText + textToAdd.substring(0, i + 1);
-            element.innerHTML = newText.replace(/\n/g, '<br>') + '<span class="typewriter-cursor"></span>';
+        if (i < text.length) {
+            // Show text typed so far + cursor
+            element.innerHTML = text.substring(0, i + 1).replace(/\n/g, '<br>') + '<span class="typewriter-cursor"></span>';
             i++;
             setTimeout(type, speed);
         } else {
-            // Remove cursor when done, keep all text
-            const finalText = existingText + textToAdd;
-            element.innerHTML = finalText.replace(/\n/g, '<br>');
+            // Remove cursor when done
+            element.innerHTML = text.replace(/\n/g, '<br>');
             if (callback) callback();
         }
     }
@@ -1258,18 +1257,14 @@ function showIntro() {
     if (!introScene || !introText) return;
     
     let currentMessageIndex = 0;
-    let accumulatedText = ''; // Track all text that's been typed
     introText.textContent = ''; // Clear initial content
     
     function showNextMessage() {
         if (currentMessageIndex < introMessages.length) {
             const message = introMessages[currentMessageIndex];
             
-            typeWriterAppend(message, introText, accumulatedText, 80, () => {
-                // Update accumulated text
-                accumulatedText += message;
-                
-                // Wait a bit before showing next message
+            typeWriter(message, introText, 80, () => {
+                // Wait a bit before showing next message (which will replace this one)
                 setTimeout(() => {
                     currentMessageIndex++;
                     if (currentMessageIndex < introMessages.length) {
